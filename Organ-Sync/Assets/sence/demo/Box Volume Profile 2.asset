@@ -21,10 +21,10 @@ MonoBehaviour:
     m_Value: 0.67
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.064
   tint:
-    m_OverrideState: 0
-    m_Value: {r: 0.55, g: 0.55, b: 1, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &-8185992028728140377
 MonoBehaviour:
   m_ObjectHideFlags: 3

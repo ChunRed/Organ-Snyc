@@ -13,9 +13,12 @@ public class gravity_translate : MonoBehaviour
     public Vector3 position = new Vector3(0f, 0f, 0f);
     public Vector3 rotation = new Vector3(0f, 0f, 0f);
 
+    
 
-    bool flag = true;
+
     float speed = 0;
+    float map = 1f;
+    bool flag = true;
 
 
     void Start()
@@ -25,11 +28,11 @@ public class gravity_translate : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey("3") && flag)
-        {
+        if (MainPipeLine.instance.model_float && flag) {
             InvokeRepeating("Movement", delay_time, 0.4f * Time.deltaTime);
+            Debug.Log("test");
             flag = false;
-        }  
+        }
     }
 
 
@@ -38,16 +41,16 @@ public class gravity_translate : MonoBehaviour
 
         
 
-        if(speed < smooth) speed += 0.000005f;
+        if(speed < smooth) speed += 0.000005f * map;
         else speed = smooth;
 
 
-        transform.position = Vector3.Lerp(transform.position, position, speed * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, position, speed * Time.deltaTime * map);
 
         transform.localEulerAngles = new Vector3(
-            Mathf.LerpAngle(transform.localEulerAngles.x, rotation.x, speed * Time.deltaTime),
-            Mathf.LerpAngle(transform.localEulerAngles.y, rotation.y, speed * Time.deltaTime),
-            Mathf.LerpAngle(transform.localEulerAngles.z, rotation.z, speed * Time.deltaTime));
+            Mathf.LerpAngle(transform.localEulerAngles.x, rotation.x, speed * Time.deltaTime * map),
+            Mathf.LerpAngle(transform.localEulerAngles.y, rotation.y, speed * Time.deltaTime * map),
+            Mathf.LerpAngle(transform.localEulerAngles.z, rotation.z, speed * Time.deltaTime * map));
     }
 
 

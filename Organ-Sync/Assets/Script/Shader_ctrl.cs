@@ -15,11 +15,18 @@ public class Shader_ctrl : MonoBehaviour
     public Material M_wood;
     public Material M_IronSheet;
 
+    public static Shader_ctrl instance;
+ 
+    void Awake(){
+        instance = this;    
+    }
+
+    
 
     public float transform_speed = 1f;
 
 
-    private bool trigger_flag = true;
+    public bool trigger_flag = true;
     private float opacity = 1f;
     private float normal = 0.46f;
     private float dark = 1f;
@@ -36,19 +43,19 @@ public class Shader_ctrl : MonoBehaviour
 
    void Update()
     {
-        if(Input.GetKeyDown("1"))  trigger_flag = true;
-        if(Input.GetKeyDown("2"))  trigger_flag = false;
+        // if(Input.GetKeyDown("1"))  trigger_flag = true;
+        // if(Input.GetKeyDown("2"))  trigger_flag = false;
 
         if(trigger_flag){
 
             // Rock Model
-            if(opacity < 1f) opacity += 0.005f * transform_speed;
+            if(opacity < 1f) opacity += 0.0003f * transform_speed;
             else opacity = 1f;
 
-            if(dark < 1f) dark += 0.01f * transform_speed;
+            if(dark < 1f) dark += 0.001f * transform_speed;
             else dark = 1f;
 
-            if(normal < 0.46f) normal += 0.01f * transform_speed;
+            if(normal < 0.46f) normal += 0.001f * transform_speed;
             else normal = 0.46f;
 
 
@@ -56,11 +63,11 @@ public class Shader_ctrl : MonoBehaviour
 
 
             //Floor
-            if(floor_pass < 1f) floor_pass += 0.005f * transform_speed;
+            if(floor_pass < 1f) floor_pass += 0.0003f * transform_speed;
             else floor_pass = 1f;
 
             //Wall
-            if(wall_pass < 1f) wall_pass += 0.005f * transform_speed;
+            if(wall_pass < 1f) wall_pass += 0.0003f * transform_speed;
             else wall_pass = 1f;
             
         }
