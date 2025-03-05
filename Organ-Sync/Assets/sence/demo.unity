@@ -539,7 +539,7 @@ MonoBehaviour:
   m_ShadowResolution:
     m_Override: 1024
     m_UseOverride: 0
-    m_Level: 3
+    m_Level: 2
   m_ShadowDimmer: 1
   m_VolumetricShadowDimmer: 1
   m_ShadowFadeDistance: 10000
@@ -43873,7 +43873,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48a8b21f7c0c4254b8262971c3e49dfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextureSize: 50
+  TextureSize: 40
   ObjectsRT: {fileID: 8400000, guid: 8c070862d451dce43924da5c78ec713c, type: 2}
   RippleShader: {fileID: 4800000, guid: d5dcaf133f8642845bec09a7bd391215, type: 3}
   AddShader: {fileID: 4800000, guid: 4c98968a7f29e1345b3e4788484542ab, type: 3}

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Ripple test
-  m_Shader: {fileID: -6465566751694194690, guid: 43a1cb344f31bca42a833f75edc74ab2,
+  m_Shader: {fileID: -6465566751694194690, guid: ae3ffddc047a44446a0fed6066e78be3,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -105,8 +105,8 @@ Material:
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 2
     - _ZWrite: 0
-    - _normal: 0.01
-    - _smooth: 1
+    - _normal: 0.45
+    - _smooth: 0.983
     m_Colors:
     - Color_d56663c6174446258f96ad41502a8436: {r: 0.259167, g: 0.6037736, b: 0.49528632,
         a: 0}
