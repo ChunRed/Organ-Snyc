@@ -53,3 +53,4 @@ crashlytics-build.properties
 
 # 忽略影片等大型檔案
 # Assets/Media/video/*.mp4
+Recordings/

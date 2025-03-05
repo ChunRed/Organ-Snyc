@@ -17,7 +17,7 @@ public class gravity_translate : MonoBehaviour
 
 
     float speed = 0;
-    float map = 1f;
+    float map = 2f;
     bool flag = true;
 
 
@@ -33,6 +33,12 @@ public class gravity_translate : MonoBehaviour
             Debug.Log("test");
             flag = false;
         }
+
+
+        // if (Input.GetKey("5") && flag) {
+        //     InvokeRepeating("Movement", delay_time, 0.4f * Time.deltaTime);
+        //     flag = false;
+        // }
     }
 
 
