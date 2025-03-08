@@ -905,9 +905,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -572.0,
-            "y": -255.99998474121095,
-            "width": 208.0,
+            "x": -512.9999389648438,
+            "y": -257.0,
+            "width": 207.99996948242188,
             "height": 302.0
         }
     },
@@ -1516,7 +1516,7 @@
     "m_ShaderOutputName": "Edge",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 0.699999988079071,
+        "x": 0.6899999976158142,
         "y": 1.0,
         "z": 1.0,
         "w": 1.0
@@ -1742,7 +1742,7 @@
     "m_ShaderOutputName": "A",
     "m_StageCapability": 3,
     "m_Value": {
-        "e00": 200.0,
+        "e00": 129.39999389648438,
         "e01": 0.0,
         "e02": 0.0,
         "e03": 0.0,
@@ -1790,9 +1790,9 @@
     "m_ShaderOutputName": "Emission",
     "m_StageCapability": 2,
     "m_Value": {
-        "x": 2.608238458633423,
-        "y": 2.608238458633423,
-        "z": 2.608238458633423
+        "x": 1.4980392456054688,
+        "y": 1.4980392456054688,
+        "z": 1.4980392456054688
     },
     "m_DefaultValue": {
         "x": 0.0,
@@ -1963,7 +1963,7 @@
     "m_ShaderOutputName": "T",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 0.5,
+        "x": 0.0,
         "y": 0.0,
         "z": 0.0,
         "w": 0.0

@@ -296,7 +296,7 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.54
+    m_Value: 0.332
   smoothness:
     m_OverrideState: 1
     m_Value: 1
@@ -570,13 +570,13 @@ MonoBehaviour:
   active: 0
   block:
     m_OverrideState: 1
-    m_Value: 0.03
+    m_Value: 0
   drift:
     m_OverrideState: 1
     m_Value: 0
   jitter:
     m_OverrideState: 1
-    m_Value: 0.015
+    m_Value: 0.036
   jump:
     m_OverrideState: 1
     m_Value: 0

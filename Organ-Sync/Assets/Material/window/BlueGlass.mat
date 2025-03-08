@@ -275,7 +275,7 @@ Material:
     - _MaterialID: 1
     - _Metallic: 0
     - _MetallicRemapMax: 1
-    - _MetallicRemapMin: 0.8237933
+    - _MetallicRemapMin: 0.5989871
     - _Mode: 3
     - _NormalMapSpace: 0
     - _NormalScale: 1
@@ -300,8 +300,8 @@ Material:
     - _ShiverDirectionality: 0.5
     - _ShiverDrag: 0.2
     - _Smoothness: 0.958
-    - _SmoothnessRemapMax: 0.9202083
-    - _SmoothnessRemapMin: 0.55783176
+    - _SmoothnessRemapMax: 0.9202082
+    - _SmoothnessRemapMin: 0.7244984
     - _SmoothnessTextureChannel: 0
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
@@ -365,7 +365,7 @@ Material:
     - _SpecColor: {r: 0.23096885, g: 0.33779976, b: 0.35294116, a: 1}
     - _SpecularColor: {r: 0.8308824, g: 0.8308824, b: 0.8308824, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _TransmittanceColor: {r: 0.83137256, g: 0.8980392, b: 0.8755507, a: 1}
+    - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
