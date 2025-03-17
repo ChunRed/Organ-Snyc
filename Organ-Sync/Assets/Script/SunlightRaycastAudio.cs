@@ -31,7 +31,7 @@ public class SunlightRaycastAudio : MonoBehaviour
         else
         {
             // 沒有碰到牆，表示玩家在光束內
-            Debug.Log("player in Spotlight");
+            // Debug.Log("player in Spotlight");
             audioSource.volume = Mathf.Lerp(audioSource.volume, LightVol, Time.deltaTime * 3f);
         }
         //------------------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ public class SunlightRaycastAudio : MonoBehaviour
                 //在光錐內則raycast
                 if (Physics.Raycast(spotlight[i].transform.position, lightDirection_s, out RaycastHit hit, Mathf.Infinity, obstacleLayer))
                 {
-                    Debug.Log("player in Spotlight");
+                    // Debug.Log("player in Spotlight");
                     audioSource.volume = Mathf.Lerp(audioSource.volume, LightVol, Time.deltaTime * 3f);
                 }
                 else
