@@ -11,6 +11,14 @@ public class SunlightRaycastAudio : MonoBehaviour
     public float NoLightVol = 0.1f; //沒光時的音量
     public float LightVol = 1f; //照光時的音量
 
+
+    //燈光控制
+    [Range(50, 15000)]
+    public int intensity = 3000;
+    public Color color = new Color (180, 180, 180, 180);
+    public bool control_light = true;
+    private bool light_change = true;
+
     void Update()
     {
         //如果被Direction light照到則發出聲音
@@ -27,12 +35,27 @@ public class SunlightRaycastAudio : MonoBehaviour
             // Ray 碰到牆，表示玩家在陰影中
             // Debug.Log("player NOT in Spotlight");
             audioSource.volume = Mathf.Lerp(audioSource.volume, NoLightVol, Time.deltaTime * 3f);
+
+            if(!light_change){
+                DAC_Light.instance.intensity = 4000;
+                DAC_Light.instance.color = Color.white;
+                light_change = true;
+            }
+            
+            
         }
         else
         {
             // 沒有碰到牆，表示玩家在光束內
             // Debug.Log("player in Spotlight");
             audioSource.volume = Mathf.Lerp(audioSource.volume, LightVol, Time.deltaTime * 3f);
+
+
+            if(control_light && light_change){
+                DAC_Light.instance.intensity = intensity;
+                DAC_Light.instance.color = color;
+                light_change = false;
+            }
         }
         //------------------------------------------------------------------------------------------------------------
         //如果被spotlight照到則發出聲音
