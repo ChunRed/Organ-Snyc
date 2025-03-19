@@ -47,8 +47,8 @@ public class Shader_ctrl : MonoBehaviour
 
    void Update()
     {
-        if(Input.GetKeyDown("1"))  trigger_flag = true;
-        if(Input.GetKeyDown("2"))  trigger_flag = false;
+        // if(Input.GetKeyDown("1"))  trigger_flag = true;
+        // if(Input.GetKeyDown("2"))  trigger_flag = false;
 
         if(trigger_flag){
 
