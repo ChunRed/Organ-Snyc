@@ -158,7 +158,7 @@ public class MainPipeLine : MonoBehaviour
         else if(State == 2f){
             if(VR_Camera.transform.position.z < -5f){
                 Shader_ctrl.instance.trigger_flag = false;
-                State = 1f;
+                State = 3f;
             }
         }
 
@@ -171,7 +171,7 @@ public class MainPipeLine : MonoBehaviour
         else if(State == 3f){
             if(VR_Camera.transform.position.z < -6.3f){
                 model_float = true;
-                State = 2f;
+                State = 4f;
             }
         }
 

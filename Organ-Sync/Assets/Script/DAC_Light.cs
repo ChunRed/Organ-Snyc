@@ -45,6 +45,7 @@ public class DAC_Light : MonoBehaviour
     public static DAC_Light instance;
 
     public bool light_move = true;
+
  
     void Awake(){
         instance = this;    
@@ -81,10 +82,9 @@ public class DAC_Light : MonoBehaviour
 
 
 
-
         currentAngle2 = new Vector3(
-            Mathf.LerpAngle(currentAngle2.x, (targetAngle.x + point_light_offset) * 2f + 20f, smooth * Time.deltaTime), 
-            Mathf.LerpAngle(currentAngle2.y, targetAngle.y * 2f - 20f, smooth * Time.deltaTime), 0f);
+            Mathf.LerpAngle(currentAngle2.x, targetAngle.x + point_light_offset, smooth*2.5f * Time.deltaTime), 
+            Mathf.LerpAngle(currentAngle2.y, targetAngle.y, smooth*2.5f * Time.deltaTime), 0f);
 
 
 
@@ -106,7 +106,7 @@ public class DAC_Light : MonoBehaviour
 
         
         window_intensity =  Mathf.Lerp(window_intensity, Remap(intensity, 0, 15000, 0, 1), 0.3f * Time.deltaTime);
-        window_emmision.SetFloat("_emission", window_intensity);
+        //window_emmision.SetFloat("_emission", window_intensity);
         
 
         Directional_Light.intensity = (int)Mathf.Lerp(Directional_Light.intensity , intensity, 0.3f * Time.deltaTime);
