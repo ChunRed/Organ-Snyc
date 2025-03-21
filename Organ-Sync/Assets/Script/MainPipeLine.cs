@@ -6,9 +6,7 @@ public class MainPipeLine : MonoBehaviour
 {
     public static MainPipeLine instance;
  
-    void Awake(){
-        instance = this;    
-    }
+    
     
     public GameObject VR_Camera;
     public GameObject VR_Passthrough;
@@ -35,6 +33,25 @@ public class MainPipeLine : MonoBehaviour
     OVRPassthroughLayer passthrough;
     
 
+    public TMPro.TextMeshProUGUI FPS; 
+    private int lastFrameIndex;
+    private float[] frameDeltaTimeArray;
+
+
+    private float CalculateFPS(){
+        float total = 0f;
+        foreach (float deltaTIme in frameDeltaTimeArray){
+            total += deltaTIme;
+        }
+        return frameDeltaTimeArray.Length / total;
+    }
+    
+    void Awake(){
+        instance = this;  
+        frameDeltaTimeArray = new float[50];  
+    }
+
+
     void Start()
     {
         passthrough = VR_Passthrough.GetComponent<OVRPassthroughLayer>();
@@ -45,6 +62,14 @@ public class MainPipeLine : MonoBehaviour
     
     void Update()
     {
+
+        //FPS監控
+        frameDeltaTimeArray[lastFrameIndex] = Time.deltaTime;
+        lastFrameIndex = (lastFrameIndex + 1) % frameDeltaTimeArray.Length;
+        FPS.text = "FPS : " + Mathf.RoundToInt(CalculateFPS()).ToString();
+
+
+
         movement();
         Set_Passthrough();
 
@@ -80,7 +105,7 @@ public class MainPipeLine : MonoBehaviour
 
 
         if(State == 1f){
-            if(VR_Camera.transform.position.z < -6.3f){
+            if(VR_Camera.transform.position.z < -6f){
                 model_float = true;
                 State = 2f;
             }
@@ -89,8 +114,8 @@ public class MainPipeLine : MonoBehaviour
 
         if(State == 2f){
             if(VR_Camera.transform.position.z < -8f){
-                Directional_Light = true;
-                State = 3f;
+                // Directional_Light = true;
+                // State = 3f;
             }
         }
 

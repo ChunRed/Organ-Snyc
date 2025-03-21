@@ -7,7 +7,7 @@ public class DAC_Light : MonoBehaviour
 {
     public GameObject VR_Hand;
     public GameObject Light;
-    public GameObject test_cube;
+    public GameObject Lamp;
     public Material window_emmision;
 
     private float window_light_pass = 1f;
@@ -23,6 +23,10 @@ public class DAC_Light : MonoBehaviour
     public  Vector3 Artnet_currentAngle;
 
     public static DAC_Light instance;
+
+
+    public bool light_move = true;
+
  
     void Awake(){
         instance = this;    
@@ -32,7 +36,7 @@ public class DAC_Light : MonoBehaviour
     void Start()
     {
         currentAngle = Light.transform.localEulerAngles;
-        Artnet_currentAngle = test_cube.transform.localEulerAngles;
+        //Artnet_currentAngle = test_cube.transform.localEulerAngles;
 
         Directional_Light = Light.GetComponent<HDAdditionalLightData>();
     }
@@ -55,30 +59,12 @@ public class DAC_Light : MonoBehaviour
             Mathf.LerpAngle(Artnet_currentAngle.z, targetAngle.z, smooth * Time.deltaTime));
 
 
-        Light.transform.localEulerAngles = currentAngle;
-        test_cube.transform.localEulerAngles = currentAngle;
-
-        // ArtNet.instance.Light_Y = new_Y;
-        // ArtNet.instance.Light_X = new_X;
+        
 
 
-        //if(Input.GetKeyDown("4")) window_light_flag = false;
-
-        if(MainPipeLine.instance.Directional_Light){
-            if(window_light_pass > 0) window_light_pass -= 0.0007f;
-            else {
-                window_light_pass = 0f;
-            }
-
-            if(window_directionallight_pass > 0) window_directionallight_pass -= 0.00001f;
-            else {
-                window_directionallight_pass = 0f;
-                MainPipeLine.instance.Directional_Light = false;
-            }
-
-
-            window_emmision.SetFloat("_emission", window_light_pass);
-            Directional_Light.intensity *= window_directionallight_pass;
+        //轉動方向光 & 檯燈
+        if (light_move){
+            Light.transform.localEulerAngles = currentAngle;
         }
     }
 }
