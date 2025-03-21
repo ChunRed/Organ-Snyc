@@ -15,6 +15,10 @@ public class Shader_ctrl : MonoBehaviour
     public Material M_wood;
     public Material M_IronSheet;
 
+
+    public  List <Material> M_List = new List <Material> ();
+
+
     public static Shader_ctrl instance;
  
     void Awake(){
@@ -106,5 +110,10 @@ public class Shader_ctrl : MonoBehaviour
         M_IronSheet.SetFloat("_pass", wall_pass);
         M_rockgroup.SetFloat("_opacity", wall_pass);
         M_wood.SetFloat("_pass", wall_pass);
+
+
+        for(int i=0; i<M_List.Count; i++){
+            M_List[i].SetFloat("_pass", wall_pass);
+        }
     }
 }

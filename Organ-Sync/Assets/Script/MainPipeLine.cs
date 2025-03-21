@@ -29,15 +29,21 @@ public class MainPipeLine : MonoBehaviour
 
     public bool model_float = false;
     public bool Directional_Light = false;
+    public bool Window_Raycast_Effect = false;
+    public bool Lamp_Raycast_Effect = true;
+    public bool Light_Object = false;
 
     OVRPassthroughLayer passthrough;
     
-
     public TMPro.TextMeshProUGUI FPS; 
     private int lastFrameIndex;
     private float[] frameDeltaTimeArray;
 
 
+    private void Awake(){
+        instance = this;   
+        frameDeltaTimeArray = new float[50];
+    }
     private float CalculateFPS(){
         float total = 0f;
         foreach (float deltaTIme in frameDeltaTimeArray){
@@ -45,12 +51,6 @@ public class MainPipeLine : MonoBehaviour
         }
         return frameDeltaTimeArray.Length / total;
     }
-    
-    void Awake(){
-        instance = this;  
-        frameDeltaTimeArray = new float[50];  
-    }
-
 
     void Start()
     {
@@ -62,6 +62,8 @@ public class MainPipeLine : MonoBehaviour
     
     void Update()
     {
+        movement();
+        Set_Passthrough();
 
         //FPS監控
         frameDeltaTimeArray[lastFrameIndex] = Time.deltaTime;
@@ -69,54 +71,121 @@ public class MainPipeLine : MonoBehaviour
         FPS.text = "FPS : " + Mathf.RoundToInt(CalculateFPS()).ToString();
 
 
-
-        movement();
-        Set_Passthrough();
-
-
-
+        //VR頭盔移動速度
         if(speed < Move_Speed*0.01f) speed += 0.0001f;
         else speed = Move_Speed*0.01f;
 
 
-        
-        if (Input.GetKey("z")) {
+        //按鈕觸發判斷VR頭盔的移動位置
+        if (Input.GetKey("2")) {
             new_position = position1;
             speed = 0;
         }
-        if (Input.GetKey("x")) {
+        if (Input.GetKey("3")) {
             new_position = position2;
             speed = 0;
         }
-        if (Input.GetKey("c")) {
+        if (Input.GetKey("4")) {
             new_position = position3;
             speed = 0;
         }
 
+
+
+
+
+
+        //用VR頭盔的位置去判斷事件是否該觸發
         VR_Camera.transform.position = Vector3.Lerp(VR_Camera.transform.position, new_position, speed * Time.deltaTime);
 
 
+
+
+
+        // [ 檯燈環節 ] 教學模式，判斷是否達到目標後進入 [ 窗光環節 ]
         if(State == 0f){
+
+            // 關閉方向光
+            DAC_Light.instance.intensity = 0;
+            DAC_Light.instance.color = Color.black;
+            Directional_Light = false;
+
+            // 關閉 window 的 raycast 偵測物件效果
+            Window_Raycast_Effect = false;  
+
+            // 開啟 lamp 的 raycast 偵測物件效果 
+            Lamp_Raycast_Effect = true;
+
+            // 關閉發亮物件
+            Light_Object = false;
+  
+
+            //判斷是否達成目標      
+            if (Input.GetKey("1")) {
+              State = 1f; 
+            }
+        }
+
+
+
+
+
+
+        // 進入[窗光環節] 關閉檯燈、開啟方向光、開啟窗戶 emmision
+        else if(State == 1f){
+            
+            // 開啟方向光
+            Invoke("Open_Window_Light", 5f);
+
+            // 關閉台燈光
+            DAC_Light.instance.Lamp_intensity = 0;
+            DAC_Light.instance.Lamp_color = Color.black;
+            DAC_Light.instance.Lamp_Smooth = 2f;
+            Lamp_Raycast_Effect = false;
+
+            // 開啟 raycast 偵測物件效果
+            Window_Raycast_Effect = true;   
+                    
+            State = 2f;
+        }
+
+
+
+
+
+
+        //VR頭盔 : -5f  ->  material init
+        else if(State == 2f){
             if(VR_Camera.transform.position.z < -5f){
                 Shader_ctrl.instance.trigger_flag = false;
-                State = 1f;
+                State = 3f;
             }
         }
 
 
-        if(State == 1f){
-            if(VR_Camera.transform.position.z < -6f){
+
+
+
+
+        //VR頭盔 : -6.3f  ->  物件飄起
+        else if(State == 3f){
+            if(VR_Camera.transform.position.z < -6.3f){
                 model_float = true;
-                State = 2f;
+                State = 4f;
             }
         }
 
 
-        if(State == 2f){
-            if(VR_Camera.transform.position.z < -8f){
-                // Directional_Light = true;
-                // State = 3f;
-            }
+
+
+
+
+        //VR頭盔 : -8f  ->  方向光關閉
+        else if(State == 4f){
+            // if(VR_Camera.transform.position.z < -8f){
+            //     Directional_Light = true;
+            //     State = 3f;
+            // }
         }
 
         
@@ -170,6 +239,18 @@ public class MainPipeLine : MonoBehaviour
 
 
 
+    void Open_Window_Light(){
+        DAC_Light.instance.intensity = 4000;
+        DAC_Light.instance.color = Color.white;
+        Directional_Light = true;
+
+
+        // 開啟發亮物件
+        Light_Object = true;
+    }
+
+
+
 
 
 
@@ -191,6 +272,14 @@ public class MainPipeLine : MonoBehaviour
 
     private void movement()
 	{ 
+        if (Input.GetKey("0"))
+        {
+            Shader_ctrl.instance.trigger_flag = false;
+        }
+        else if(Input.GetKey("9")){
+            Shader_ctrl.instance.trigger_flag = true;
+        }
+
 		
         if (Input.GetKey("d"))
         {
