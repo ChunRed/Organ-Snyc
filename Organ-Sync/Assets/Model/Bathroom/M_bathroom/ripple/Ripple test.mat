@@ -105,7 +105,7 @@ Material:
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 2
     - _ZWrite: 0
-    - _normal: 0.68
+    - _normal: 0.703
     - _smooth: 0.983
     m_Colors:
     - Color_d56663c6174446258f96ad41502a8436: {r: 0.259167, g: 0.6037736, b: 0.49528632,

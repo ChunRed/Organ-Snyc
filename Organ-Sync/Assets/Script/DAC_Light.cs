@@ -23,9 +23,9 @@ public class DAC_Light : MonoBehaviour
 
     //dynamic control Directional light 
     [Range(0, 15000)]
-    public int intensity = 3000;
+    public int intensity = 0;
     public Color color = new Color (180, 180, 180, 180);
-    float window_intensity = 1f;
+    float window_intensity = 0f;
 
 
     //dynamic control Lamp light 
@@ -106,7 +106,7 @@ public class DAC_Light : MonoBehaviour
 
         
         window_intensity =  Mathf.Lerp(window_intensity, Remap(intensity, 0, 15000, 0, 1), 0.3f * Time.deltaTime);
-        //window_emmision.SetFloat("_emission", window_intensity);
+        window_emmision.SetFloat("_emission", window_intensity);
         
 
         Directional_Light.intensity = (int)Mathf.Lerp(Directional_Light.intensity , intensity, 0.3f * Time.deltaTime);
