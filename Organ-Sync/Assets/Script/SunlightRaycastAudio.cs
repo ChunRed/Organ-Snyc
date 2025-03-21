@@ -26,48 +26,48 @@ public class SunlightRaycastAudio : MonoBehaviour
 
     void Update()
     {
-        //如果被Direction light照到則發出聲音
-        if (directionalLight == null || audioSource == null) return;
+        // //如果被Direction light照到則發出聲音
+        // if (directionalLight == null || audioSource == null) return;
 
-        // 計算光照射方向（Directional Light 的 forward 方向是反的，所以要取 -forward）
-        Vector3 lightDirection = -directionalLight.transform.forward;
-        Vector3 rayOrigin = GetComponent<Collider>().bounds.center;
+        // // 計算光照射方向（Directional Light 的 forward 方向是反的，所以要取 -forward）
+        // Vector3 lightDirection = -directionalLight.transform.forward;
+        // Vector3 rayOrigin = GetComponent<Collider>().bounds.center;
 
 
 
         
-        //判斷是否啟用效果
-        if(MainPipeLine.instance.Window_Raycast_Effect){
+        // //判斷是否啟用效果
+        // if(MainPipeLine.instance.Window_Raycast_Effect){
 
-            // 從玩家位置向D light發射 Ray
-            // if(Physics.Raycast(Org,Dir,(if hit do sth),distance,mask))
-            if (Physics.Raycast(rayOrigin, lightDirection, Mathf.Infinity, obstacleLayer))
-            {
-                // Ray 碰到牆，表示玩家在陰影中
-                // Debug.Log("player NOT in Spotlight");
-                audioSource.volume = Mathf.Lerp(audioSource.volume, NoLightVol, Time.deltaTime * 3f);
+        //     // 從玩家位置向D light發射 Ray
+        //     // if(Physics.Raycast(Org,Dir,(if hit do sth),distance,mask))
+        //     if (Physics.Raycast(rayOrigin, lightDirection, Mathf.Infinity, obstacleLayer))
+        //     {
+        //         // Ray 碰到牆，表示玩家在陰影中
+        //         // Debug.Log("player NOT in Spotlight");
+        //         audioSource.volume = Mathf.Lerp(audioSource.volume, NoLightVol, Time.deltaTime * 3f);
 
-                if(!light_change){
-                    DAC_Light.instance.intensity = 1000;
-                    DAC_Light.instance.color = Color.white;
-                    light_change = true;
-                }
+        //         if(!light_change){
+        //             DAC_Light.instance.intensity = 1000;
+        //             DAC_Light.instance.color = Color.white;
+        //             light_change = true;
+        //         }
                 
                 
-            }
-            else
-            {
-                // 沒有碰到牆，表示玩家在光束內
-                // Debug.Log("player in Spotlight");
-                audioSource.volume = Mathf.Lerp(audioSource.volume, LightVol, Time.deltaTime * 3f);
+        //     }
+        //     else
+        //     {
+        //         // 沒有碰到牆，表示玩家在光束內
+        //         // Debug.Log("player in Spotlight");
+        //         audioSource.volume = Mathf.Lerp(audioSource.volume, LightVol, Time.deltaTime * 3f);
 
 
-                if(control_light && light_change){
-                    DAC_Light.instance.intensity = intensity;
-                    DAC_Light.instance.color = color;
-                    light_change = false;
-                }
-            }
-        }
+        //         if(control_light && light_change){
+        //             DAC_Light.instance.intensity = intensity;
+        //             DAC_Light.instance.color = color;
+        //             light_change = false;
+        //         }
+        //     }
+        // }
     }
 }

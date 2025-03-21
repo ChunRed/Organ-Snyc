@@ -28,11 +28,11 @@ public class gravity_translate : MonoBehaviour
 
     void Update()
     {
-        if (MainPipeLine.instance.model_float && flag) {
-            InvokeRepeating("Movement", delay_time, 0.4f * Time.deltaTime);
-            Debug.Log("test");
-            flag = false;
-        }
+        // if (MainPipeLine.instance.model_float && flag) {
+        //     InvokeRepeating("Movement", delay_time, 0.4f * Time.deltaTime);
+        //     Debug.Log("test");
+        //     flag = false;
+        // }
 
 
         // if (Input.GetKey("5") && flag) {
