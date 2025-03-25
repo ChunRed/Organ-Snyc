@@ -9,6 +9,8 @@ public class DAC_Light : MonoBehaviour
     public GameObject Light;
     public GameObject Lamp;
     public Material window_emmision;
+    public Material Lamp_Light_emmision;
+    public Material Lamp_head_emmision;
 
     private float window_light_pass = 1f;
     private float window_directionallight_pass = 1f;
@@ -45,6 +47,9 @@ public class DAC_Light : MonoBehaviour
     public static DAC_Light instance;
 
     public bool light_move = true;
+    public bool lamp_move = true;
+
+    public GameObject Lamp_LightSensor;
 
  
     void Awake(){
@@ -61,7 +66,6 @@ public class DAC_Light : MonoBehaviour
         Directional_Light = Light.GetComponent<HDAdditionalLightData>();
         Lamp_Light= Lamp.GetComponent<HDAdditionalLightData>();
 
-        
     }
 
     
@@ -100,7 +104,7 @@ public class DAC_Light : MonoBehaviour
         //轉動方向光 & 檯燈
         if (light_move){
             Light.transform.localEulerAngles = currentAngle;
-            Lamp.transform.localEulerAngles = currentAngle2;
+            
         }
         
 
@@ -112,9 +116,22 @@ public class DAC_Light : MonoBehaviour
         Directional_Light.intensity = (int)Mathf.Lerp(Directional_Light.intensity , intensity, 0.3f * Time.deltaTime);
         Directional_Light.color = Color.Lerp(Directional_Light.color , color, 0.3f * Time.deltaTime);
 
-        Lamp_Light.intensity = (int)Mathf.Lerp(Lamp_Light.intensity , Lamp_intensity, Lamp_Smooth * Time.deltaTime);
-        Lamp_Light.color = Color.Lerp(Lamp_Light.color , Lamp_color, Lamp_Smooth * Time.deltaTime);
 
+        if(Lamp_Light.intensity != 0){
+            Lamp.transform.localEulerAngles = currentAngle2;
+            Lamp_Light.intensity = (int)Mathf.Lerp(Lamp_Light.intensity , Lamp_intensity, Lamp_Smooth * Time.deltaTime);
+            Lamp_Light.color = Color.Lerp(Lamp_Light.color , Lamp_color, Lamp_Smooth * Time.deltaTime);
+
+            float Lamp_emmision = Remap(Lamp_Light.intensity, 0, 15000, 0, 50);
+            Lamp_head_emmision.SetColor("_Color", new Color(244*Lamp_emmision, 154*Lamp_emmision, 86*Lamp_emmision, 1));
+            Lamp_head_emmision.SetFloat("_emission", Lamp_emmision*50f);
+            Lamp_Light_emmision.SetFloat("_EmissiveIntensity", Lamp_emmision*100f);
+            
+        }
+        else{
+            Destroy(Lamp);
+            Destroy(Lamp_LightSensor);
+        }
     }
 
 

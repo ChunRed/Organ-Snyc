@@ -37,8 +37,6 @@ public class SpotLight_raycast : MonoBehaviour
 
 
 
-        //判斷是否啟用效果
-        if(MainPipeLine.instance.Lamp_Raycast_Effect){
 
             // 測試玩家是否在光錐內
             if (Vector3.Angle(spotlight.transform.forward, lightDirection_s) <= spotlight.spotAngle / 2)
@@ -88,6 +86,5 @@ public class SpotLight_raycast : MonoBehaviour
                     
                 }
             }
-        }
     }
 }

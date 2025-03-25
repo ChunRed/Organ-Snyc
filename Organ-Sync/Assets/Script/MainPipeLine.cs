@@ -30,7 +30,6 @@ public class MainPipeLine : MonoBehaviour
     public bool model_float = false;
     public bool Directional_Light = false;
     public bool Window_Raycast_Effect = false;
-    public bool Lamp_Raycast_Effect = true;
     public bool Light_Object = false;
 
     OVRPassthroughLayer passthrough;
@@ -96,7 +95,7 @@ public class MainPipeLine : MonoBehaviour
 
 
         //用VR頭盔的位置去判斷事件是否該觸發
-        VR_Camera.transform.position = Vector3.Lerp(VR_Camera.transform.position, new_position, speed * Time.deltaTime);
+        //VR_Camera.transform.position = Vector3.Lerp(VR_Camera.transform.position, new_position, speed * Time.deltaTime);
 
 
 
@@ -113,8 +112,6 @@ public class MainPipeLine : MonoBehaviour
             // 關閉 window 的 raycast 偵測物件效果
             Window_Raycast_Effect = false;  
 
-            // 開啟 lamp 的 raycast 偵測物件效果 
-            Lamp_Raycast_Effect = true;
 
             // 關閉發亮物件
             Light_Object = false;
@@ -135,13 +132,15 @@ public class MainPipeLine : MonoBehaviour
         else if(State == 1f){
             
             // 開啟方向光
-            Invoke("Open_Window_Light", 5f);
+            Invoke("Open_Window_Light", 18f);
 
             // 關閉台燈光
             DAC_Light.instance.Lamp_intensity = 0;
             DAC_Light.instance.Lamp_color = Color.black;
             DAC_Light.instance.Lamp_Smooth = 2f;
-            Lamp_Raycast_Effect = false;
+            
+            
+
 
             // 開啟 raycast 偵測物件效果
             Window_Raycast_Effect = true;   
