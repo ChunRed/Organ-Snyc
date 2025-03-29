@@ -11,6 +11,8 @@ public class RecenterOrigin : MonoBehaviour
     public Transform origin;
     public Transform target;
 
+    public Material CenterIcon;
+
     public void Recenter(){
         Vector3 offset = head.position - origin.position;
         offset.y = 0.4f;
@@ -26,18 +28,26 @@ public class RecenterOrigin : MonoBehaviour
 
         origin.RotateAround(head.position, Vector3.up, angle);
 
+        Invoke("HideIcon", 5f);
     }
 
 
     void Start()
     {
-        
+        Recenter();
     }
 
     void Update()
     {
         if (Input.GetKey("r")) {
             Recenter();
+            CenterIcon.SetFloat("_pass", 1f);
         }
+    }
+
+
+
+    void HideIcon(){
+        CenterIcon.SetFloat("_pass", 0f);
     }
 }

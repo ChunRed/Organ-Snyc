@@ -8,6 +8,7 @@ public class DAC_Light : MonoBehaviour
     public GameObject VR_Hand;
     public GameObject Light;
     public GameObject Lamp;
+    public GameObject Lamp_pedestal;
     public Material window_emmision;
     public Material Lamp_Light_emmision;
     public Material Lamp_head_emmision;
@@ -131,6 +132,7 @@ public class DAC_Light : MonoBehaviour
         else{
             Destroy(Lamp);
             Destroy(Lamp_LightSensor);
+            Destroy(Lamp_pedestal);
         }
     }
 

@@ -34,7 +34,10 @@ public class MainPipeLine : MonoBehaviour
 
     OVRPassthroughLayer passthrough;
     
+    //UI
     public TMPro.TextMeshProUGUI FPS; 
+    public GameObject intro;
+
     private int lastFrameIndex;
     private float[] frameDeltaTimeArray;
 
@@ -138,6 +141,9 @@ public class MainPipeLine : MonoBehaviour
             DAC_Light.instance.Lamp_intensity = 0;
             DAC_Light.instance.Lamp_color = Color.black;
             DAC_Light.instance.Lamp_Smooth = 2f;
+
+            //關閉 Intro UI Text
+            Destroy(intro);
             
             
 
