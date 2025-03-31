@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class MainPipeLine : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class MainPipeLine : MonoBehaviour
 
     float speed = 0;
 
-    [Range(0f, 10f)]
+    [Range(0f, 20f)]
     public float State = 0f;
 
     public bool model_float = false;
@@ -40,6 +41,12 @@ public class MainPipeLine : MonoBehaviour
 
     private int lastFrameIndex;
     private float[] frameDeltaTimeArray;
+
+    private bool soundStart = false;
+
+
+    //video player
+    private VideoPlayer _videoPlayer;
 
 
     private void Awake(){
@@ -59,6 +66,9 @@ public class MainPipeLine : MonoBehaviour
         passthrough = VR_Passthrough.GetComponent<OVRPassthroughLayer>();
         VR_Passthrough.SetActive(false);
         new_position = position1;
+
+        
+        _videoPlayer = GetComponent<VideoPlayer>();
     }
 
     
@@ -103,7 +113,7 @@ public class MainPipeLine : MonoBehaviour
 
 
 
-
+        //MARK:STATE - 0
         // [ 檯燈環節 ] 教學模式，判斷是否達到目標後進入 [ 窗光環節 ]
         if(State == 0f){
 
@@ -112,17 +122,51 @@ public class MainPipeLine : MonoBehaviour
             DAC_Light.instance.color = Color.black;
             Directional_Light = false;
 
+
+            // 關閉台燈光
+            DAC_Light.instance.Lamp_intensity = 1;
+            DAC_Light.instance.Lamp_color = Color.black;
+            DAC_Light.instance.Lamp_Smooth = 2f;
+
+
+
             // 關閉 window 的 raycast 偵測物件效果
             Window_Raycast_Effect = false;  
 
 
             // 關閉發亮物件
             Light_Object = false;
-  
+
+
+            //判斷是否開始進入旁白
+            if(Input.GetKey("n") && soundStart == false){
+                soundStart = true;
+                SoundManager.instance.play_after_sec();
+                SoundManager.instance.play_narration_as();
+
+                StartCoroutine(WaitChangeState(1f, 35f));
+            }
+        }
+
+
+
+
+        //MARK:STATE - 1
+        //開啟檯燈並達成指定目標 ( 用檯燈照自己 ) 
+        else if(State == 1f){
+            
+            // 開啟台燈光
+            DAC_Light.instance.Lamp_intensity = 5000;
+            DAC_Light.instance.Lamp_color = Color.white;
+            DAC_Light.instance.Lamp_Smooth = 0.02f;
+
 
             //判斷是否達成目標      
             if (Input.GetKey("1")) {
-              State = 1f; 
+                if(soundStart == false){
+                    SoundManager.instance.play_main_as();
+                }
+                State = 2f; 
             }
         }
 
@@ -130,13 +174,10 @@ public class MainPipeLine : MonoBehaviour
 
 
 
-
-        // 進入[窗光環節] 關閉檯燈、開啟方向光、開啟窗戶 emmision
-        else if(State == 1f){
+        //MARK:STATE - 2
+        // 進入[窗光環節] 關閉檯燈
+        else if(State == 2f){
             
-            // 開啟方向光
-            Invoke("Open_Window_Light", 18f);
-
             // 關閉台燈光
             DAC_Light.instance.Lamp_intensity = 0;
             DAC_Light.instance.Lamp_color = Color.black;
@@ -144,26 +185,40 @@ public class MainPipeLine : MonoBehaviour
 
             //關閉 Intro UI Text
             Destroy(intro);
-            
-            
 
 
             // 開啟 raycast 偵測物件效果
             Window_Raycast_Effect = true;   
                     
-            State = 2f;
+            StartCoroutine(WaitChangeState(3f, 15f));
+        }
+
+
+
+        //MARK:STATE - 3
+        // 開啟方向光、開啟窗戶 emmision
+        else if(State == 3f){
+            DAC_Light.instance.intensity = 4000;
+            DAC_Light.instance.color = Color.white;
+            Directional_Light = true;
+
+
+            // 開啟發亮物件
+            Light_Object = true;
+
+            State = 4f;
         }
 
 
 
 
 
-
+        //MARK:STATE - 4
         //VR頭盔 : -5f  ->  material init
-        else if(State == 2f){
+        else if(State == 4f){
             if(VR_Camera.transform.position.z < -5f){
                 Shader_ctrl.instance.trigger_flag = false;
-                State = 3f;
+                State = 5f;
             }
         }
 
@@ -171,12 +226,12 @@ public class MainPipeLine : MonoBehaviour
 
 
 
-
+        //MARK:STATE - 5
         //VR頭盔 : -6.3f  ->  物件飄起
-        else if(State == 3f){
+        else if(State == 5f){
             if(VR_Camera.transform.position.z < -6.3f){
                 model_float = true;
-                State = 4f;
+                State = 6f;
             }
         }
 
@@ -184,9 +239,9 @@ public class MainPipeLine : MonoBehaviour
 
 
 
-
+        //MARK:STATE - 6
         //VR頭盔 : -8f  ->  方向光關閉
-        else if(State == 4f){
+        else if(State == 6f){
             // if(VR_Camera.transform.position.z < -8f){
             //     Directional_Light = true;
             //     State = 3f;
@@ -235,23 +290,25 @@ public class MainPipeLine : MonoBehaviour
             if(passthrough.textureOpacity > 0f) passthrough.textureOpacity -= 0.01f;
             else passthrough.textureOpacity = 0f;
         }
-
-        // passthroughLayer.overlayType = OVROverlay.OverlayType.Overlay;
-        // passthroughLayer.textureOpacity = 0.3f;
-        // environment.SetActive(false);
     }
 
 
 
 
-    void Open_Window_Light(){
-        DAC_Light.instance.intensity = 4000;
-        DAC_Light.instance.color = Color.white;
-        Directional_Light = true;
+    
 
 
-        // 開啟發亮物件
-        Light_Object = true;
+    IEnumerator WaitChangeState(float state, float time){ 
+
+        State = 20f;
+        yield return new WaitForSeconds(time);
+        State = state;
+
+        //play video in state 1
+        if(state == 1f){
+            _videoPlayer.isLooping = false;
+            _videoPlayer.Play();
+        }
     }
 
 

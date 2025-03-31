@@ -10,10 +10,11 @@ public class SunlightRaycastAudio : MonoBehaviour
     public LayerMask obstacleLayer;  // 牆的圖層
     public float NoLightVol = 0f; //沒光時的音量
     public float LightVol = 1f; //照光時的音量
+    public bool first_hit = false;
 
 
     //燈光控制
-    [Range(50, 15000)]
+    [Range(50, 50000)]
     public int intensity = 3000;
     public Color color = new Color (180, 180, 180, 180);
     public bool control_light = true;
@@ -22,6 +23,9 @@ public class SunlightRaycastAudio : MonoBehaviour
 
     void Setup(){
         audioSource.volume = 0f;
+        audioSource.playOnAwake = false;
+        audioSource.loop = true;
+        audioSource.Stop();
     }
 
     void Update()
@@ -59,7 +63,13 @@ public class SunlightRaycastAudio : MonoBehaviour
             {
                 // 沒有碰到牆，表示玩家在光束內
                 // Debug.Log("player in Spotlight");
-                audioSource.volume = Mathf.Lerp(audioSource.volume, LightVol, Time.deltaTime * 3f);
+                if(!first_hit){
+                    audioSource.Play();
+                    first_hit = true;
+                }else{
+                    audioSource.volume = Mathf.Lerp(audioSource.volume, LightVol, Time.deltaTime * 3f);
+                }
+                
 
 
                 if(control_light && light_change){

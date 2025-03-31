@@ -126,7 +126,7 @@ public class DAC_Light : MonoBehaviour
             float Lamp_emmision = Remap(Lamp_Light.intensity, 0, 15000, 0, 50);
             Lamp_head_emmision.SetColor("_Color", new Color(244*Lamp_emmision, 154*Lamp_emmision, 86*Lamp_emmision, 1));
             Lamp_head_emmision.SetFloat("_emission", Lamp_emmision*50f);
-            Lamp_Light_emmision.SetFloat("_EmissiveIntensity", Lamp_emmision*100f);
+            Lamp_Light_emmision.SetFloat("_pass", Lamp_emmision*180f);
             
         }
         else{
