@@ -85,7 +85,7 @@ public class MainPipeLine : MonoBehaviour
     {
         passthrough = VR_Passthrough.GetComponent<OVRPassthroughLayer>();
         VR_Passthrough.SetActive(false);
-        new_position = position1;
+        
 
         
         _videoPlayer = GetComponent<VideoPlayer>();
@@ -119,27 +119,15 @@ public class MainPipeLine : MonoBehaviour
         else speed = Move_Speed*0.01f;
 
 
-        //按鈕觸發判斷VR頭盔的移動位置
-        if (Input.GetKey("6")) {
-            new_position = position1;
-            speed = 0;
-        }
-        if (Input.GetKey("7")) {
-            new_position = position2;
-            speed = 0;
-        }
-        if (Input.GetKey("8")) {
-            new_position = position3;
-            speed = 0;
-        }
-
-
 
 
 
 
         //用VR頭盔的位置去判斷事件是否該觸發
-        //VR_Camera.transform.position = Vector3.Lerp(VR_Camera.transform.position, new_position, speed * Time.deltaTime);
+        if (new_position.z != 0f){
+            VR_Camera.transform.position = Vector3.Lerp(VR_Camera.transform.position, new_position, speed * Time.deltaTime);
+        }
+        
 
 
 
@@ -298,7 +286,7 @@ public class MainPipeLine : MonoBehaviour
         //======================================================================
         //======================================================================
         // 進入[窗光環節] 關閉檯燈
-        else if(State == 2f){
+        else if(State == 5f){
 
             //刪除所有 Intro 物件
             Destroy(intro);
@@ -342,6 +330,14 @@ public class MainPipeLine : MonoBehaviour
         //======================================================================
         //VR頭盔 : -5f  ->  material init
         else if(State == 7f){
+
+            //移動VR頭盔的位置
+            if (Input.GetKey("5")) {
+                new_position = position2;
+                speed = 0;
+            }
+
+            //若 position.z < -5f 則啟用 shader_ctrl.cs
             if(VR_Camera.transform.position.z < -5f){
                 Shader_ctrl.instance.trigger_flag = false;
                 State = 8f;
@@ -357,9 +353,16 @@ public class MainPipeLine : MonoBehaviour
         //======================================================================
         //VR頭盔 : -6.3f  ->  物件飄起
         else if(State == 8f){
+
+            //若 position.z < -6.3f 則啟用 gravity_translate.cs
             if(VR_Camera.transform.position.z < -6.3f){
                 model_float = true;
-                State = 9f;
+
+
+                //關閉窗光 離開[窗光環節]
+                if(Input.GetKey("6")){
+                    State = 9f;
+                }
             }
         }
 
@@ -370,15 +373,38 @@ public class MainPipeLine : MonoBehaviour
         //MARK:STATE - 9
         //======================================================================
         //======================================================================
-        //VR頭盔 : -8f  ->  方向光關閉
+        //VR頭盔 : -8f  ->  窗光關閉 離開[窗光環節]
         else if(State == 9f){
-            // if(VR_Camera.transform.position.z < -8f){
-            //     Directional_Light = true;
-            //     State = 3f;
-            // }
+            
+            // 關閉 raycast 偵測物件效果
+            Window_Raycast_Effect = false; 
+
+            // 關閉方向光、關閉窗戶 emmision
+            DAC_Light.instance.intensity = 0;
+            DAC_Light.instance.color = Color.black;
+            
+            // 關閉發亮物件
+            Light_Object = false;
+
+            State = 10f;
+
         }
 
-        
+
+
+        //MARK:STATE - 10
+        //======================================================================
+        //======================================================================
+        //進入 [無邊] 環節
+        else if(State == 10f){
+            
+            //刪除模型
+
+            //開啟無邊燈光
+
+            //開啟無邊light sensor
+
+        }
 
     }
 
