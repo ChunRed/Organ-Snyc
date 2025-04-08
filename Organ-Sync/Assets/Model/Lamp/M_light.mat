@@ -265,7 +265,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     - _emission: 5000
-    - _pass: 236.40001
+    - _pass: 0.6
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}

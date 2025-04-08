@@ -8,6 +8,7 @@ public class DAC_Light : MonoBehaviour
     public GameObject VR_Hand;
     public GameObject Light;
     public GameObject Lamp;
+    public GameObject noedge_light;
     public GameObject Lamp_pedestal;
     public Material window_emmision;
     public Material Lamp_Light_emmision;
@@ -110,7 +111,7 @@ public class DAC_Light : MonoBehaviour
         
 
         
-        window_intensity =  Mathf.Lerp(window_intensity, Remap(intensity, 0, 15000, 0, 1), 0.3f * Time.deltaTime);
+        window_intensity =  Mathf.Lerp(window_intensity, Remap(intensity, 0, 15000, 0, 1), 0.6f * Time.deltaTime);
         window_emmision.SetFloat("_emission", window_intensity);
         
 
@@ -120,6 +121,7 @@ public class DAC_Light : MonoBehaviour
 
         if(Lamp_Light.intensity != 0){
             Lamp.transform.localEulerAngles = currentAngle2;
+            noedge_light.transform.localEulerAngles = currentAngle2;
             Lamp_Light.intensity = (int)Mathf.Lerp(Lamp_Light.intensity , Lamp_intensity, Lamp_Smooth * Time.deltaTime);
             Lamp_Light.color = Color.Lerp(Lamp_Light.color , Lamp_color, Lamp_Smooth * Time.deltaTime);
 

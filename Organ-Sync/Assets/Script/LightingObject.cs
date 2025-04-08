@@ -19,16 +19,18 @@ public class LightingObject : MonoBehaviour
     
     void Update()
     {
-        if(MainPipeLine.instance.Light_Object){
-            reflection_probe.SetActive(true);
-            for(int i=0; i<M_List.Count; i++){
-                M_List[i].SetFloat("_pass", 1f);
+        if(MainPipeLine.instance.State != 10f){
+            if(MainPipeLine.instance.Light_Object){
+                reflection_probe.SetActive(true);
+                for(int i=0; i<M_List.Count; i++){
+                    M_List[i].SetFloat("_pass", 1f);
+                }
             }
-        }
-        else{
-            reflection_probe.SetActive(false);
-            for(int i=0; i<M_List.Count; i++){
-                M_List[i].SetFloat("_pass", 0f);
+            else{
+                reflection_probe.SetActive(false);
+                for(int i=0; i<M_List.Count; i++){
+                    M_List[i].SetFloat("_pass", 0f);
+                }
             }
         }
     }

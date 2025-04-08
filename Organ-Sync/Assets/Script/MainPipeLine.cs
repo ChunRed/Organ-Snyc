@@ -55,6 +55,10 @@ public class MainPipeLine : MonoBehaviour
     //UI
 
 
+    //場景模型
+    public GameObject Model;
+
+
     //檯燈亮起的延遲時間
     [Range(0f, 50f)]
     public float Lamp_trigger_delay = 35f;
@@ -386,8 +390,7 @@ public class MainPipeLine : MonoBehaviour
             // 關閉發亮物件
             Light_Object = false;
 
-            State = 10f;
-
+            StartCoroutine(WaitChangeState(10f, 30f));
         }
 
 
@@ -399,6 +402,7 @@ public class MainPipeLine : MonoBehaviour
         else if(State == 10f){
             
             //刪除模型
+            Destroy(Model);
 
             //開啟無邊燈光
 
