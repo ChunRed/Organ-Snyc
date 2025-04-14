@@ -12,8 +12,12 @@ public class SunlightRaycastAudio : MonoBehaviour
     public float LightVol = 1f; //照光時的音量
     public bool first_hit = false;
 
+    [Header("判斷物件使否有被光線照到")]
+    public bool light_istrigger = false;
+
 
     //燈光控制
+    [Header("光線參數調整")]
     [Range(50, 50000)]
     public int intensity = 3000;
     public Color color = new Color (180, 180, 180, 180);
@@ -55,6 +59,7 @@ public class SunlightRaycastAudio : MonoBehaviour
                     DAC_Light.instance.intensity = 1000;
                     DAC_Light.instance.color = Color.white;
                     light_change = true;
+                    light_istrigger = false;
                 }
                 
                 
@@ -76,6 +81,7 @@ public class SunlightRaycastAudio : MonoBehaviour
                     DAC_Light.instance.intensity = intensity;
                     DAC_Light.instance.color = color;
                     light_change = false;
+                    light_istrigger = true;
                 }
             }
         }

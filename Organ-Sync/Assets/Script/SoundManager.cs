@@ -8,6 +8,7 @@ public class SoundManager : MonoBehaviour
     public static SoundManager instance;
     public AudioSource main_as; // 背景音樂檔案
     public AudioSource narration_as; //旁白聲音檔
+    public AudioSource ending_as; //結束音檔
     
     // public AudioMixer masterMixer; 
     public float playFromSec = 0f; // 從指定秒數播放背景聲音
@@ -30,6 +31,11 @@ public class SoundManager : MonoBehaviour
         narration_as.playOnAwake = false;
         narration_as.loop = false;
         narration_as.Stop();
+
+        ending_as.spatialBlend = 0f; // 2D
+        ending_as.playOnAwake = false;
+        ending_as.loop = false;
+        ending_as.Stop();
     }
 
 
@@ -58,6 +64,14 @@ public class SoundManager : MonoBehaviour
         if (narration_as != null)
         {
             narration_as.Play();
+        }
+    }
+
+    public void play_ending_as()
+    {
+        if (ending_as != null)
+        {
+            ending_as.Play();
         }
     }
 

@@ -5,7 +5,9 @@ using UnityEngine.Video;
 
 public class temperture_count : MonoBehaviour
 {
-    
+    public GameObject LightSensor;
+    SunlightRaycastAudio _LightSensor;
+
     public VideoClip increase_clip;
     public VideoClip decrease_clip;
 
@@ -16,6 +18,7 @@ public class temperture_count : MonoBehaviour
     private VideoPlayer _videoPlayer;
 
     public float state = 0f;
+    private float count = 0f;
 
     void Start()
     {
@@ -24,12 +27,13 @@ public class temperture_count : MonoBehaviour
         _videoPlayer.Play();
         state = 1f;
 
-        _videoPlayer.loopPointReached += CheckOver;
+        _LightSensor = LightSensor.GetComponent<SunlightRaycastAudio>();
     }
 
     
     void Update()
     {   
+        trigger = _LightSensor.light_istrigger;
 
         //停止播放狀態
         if(state == 0f){
@@ -37,29 +41,23 @@ public class temperture_count : MonoBehaviour
                 if( trigger ){
                 _videoPlayer.clip = increase_clip;
                 _videoPlayer.Play();
-                _videoPlayer.loopPointReached += CheckOver;
                 state = 1f;
                 }
                 else{
                     _videoPlayer.clip = decrease_clip;
                     _videoPlayer.Play();
-                    _videoPlayer.loopPointReached += CheckOver;
                     state = 1f;
                 }
                 trigger_pass = trigger;
             }
         }
+        else if(state == 1f){
+            count += Time.deltaTime;
+            if(count > 7f){
+                state = 0f;
+                count = 0f;
+            }
+        }
     }
-
-
-    void CheckOver(UnityEngine.Video.VideoPlayer vp)
-    {
-        //Video Is Ove
-        state = 0f;
-    }
-
-
     
-
-
 }

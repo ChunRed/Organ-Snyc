@@ -29,14 +29,23 @@ public class MainPipeLine : MonoBehaviour
     [Range(0f, 20f)]
     public float State = 0f;
 
+    //物件飄起觸發
+    [Header("物件飄起觸發")]
     public bool model_float = false;
+    
+    //燈光觸發
+    [Header("燈光觸發")]
     public bool Directional_Light = false;
     public bool Window_Raycast_Effect = false;
     public bool Light_Object = false;
+    public bool  ambient_light = false;
+
+
 
     OVRPassthroughLayer passthrough;
     
     //UI
+    [Header("UI參數")]
     public TMPro.TextMeshProUGUI FPS; 
     public GameObject intro;
     public Material M_hand_icon_UD;
@@ -56,7 +65,9 @@ public class MainPipeLine : MonoBehaviour
 
 
     //場景模型
+    [Header("場景模型")]
     public GameObject Model;
+    public GameObject Smooth_Model;
 
 
     //檯燈亮起的延遲時間
@@ -70,7 +81,7 @@ public class MainPipeLine : MonoBehaviour
 
 
     //video player
-    private VideoPlayer _videoPlayer;
+    //private VideoPlayer _videoPlayer;
 
 
     private void Awake(){
@@ -92,7 +103,7 @@ public class MainPipeLine : MonoBehaviour
         
 
         
-        _videoPlayer = GetComponent<VideoPlayer>();
+        //_videoPlayer = GetComponent<VideoPlayer>();
 
         A_hand = Intro_hand.GetComponent<Animator>();
         A_light = Intro_light.GetComponent<Animator>();
@@ -336,14 +347,15 @@ public class MainPipeLine : MonoBehaviour
         else if(State == 7f){
 
             //移動VR頭盔的位置
-            if (Input.GetKey("5")) {
-                new_position = position2;
-                speed = 0;
-            }
+            // if (Input.GetKey("5")) {
+            //     new_position = position2;
+            //     speed = 0;
+            // }
 
             //若 position.z < -5f 則啟用 shader_ctrl.cs
             if(VR_Camera.transform.position.z < -5f){
                 Shader_ctrl.instance.trigger_flag = false;
+                SoundManager.instance.play_ending_as();
                 State = 8f;
             }
         }
@@ -359,9 +371,9 @@ public class MainPipeLine : MonoBehaviour
         else if(State == 8f){
 
             //若 position.z < -6.3f 則啟用 gravity_translate.cs
-            if(VR_Camera.transform.position.z < -6.3f){
+            if(VR_Camera.transform.position.z < -5.8f){
                 model_float = true;
-
+                Destroy(Smooth_Model);
 
                 //關閉窗光 離開[窗光環節]
                 if(Input.GetKey("6")){
@@ -405,6 +417,7 @@ public class MainPipeLine : MonoBehaviour
             Destroy(Model);
 
             //開啟無邊燈光
+            ambient_light = true;
 
             //開啟無邊light sensor
 
@@ -465,10 +478,10 @@ public class MainPipeLine : MonoBehaviour
         State = state;
 
         //play video in state 1
-        if(state == 1f){
-            _videoPlayer.isLooping = false;
-            _videoPlayer.Play();
-        }
+        // if(state == 1f){
+        //     _videoPlayer.isLooping = false;
+        //     _videoPlayer.Play();
+        // }
     }
 
 
