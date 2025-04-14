@@ -9,9 +9,11 @@ public class SoundManager : MonoBehaviour
     public AudioSource main_as; // 背景音樂檔案
     public AudioSource narration_as; //旁白聲音檔
     public AudioSource ending_as; //結束音檔
+    public AudioSource light_as; //direction light sound
     
-    // public AudioMixer masterMixer; 
+    public AudioMixer sceneMixer;  //場景總音量控制
     public float playFromSec = 0f; // 從指定秒數播放背景聲音
+    public float turnoffFromSec = 0f; //幾秒後背景音樂消失
     // public float setBgmVol = 0f; // 背景音樂音量
     // private float lastBgmVol = 0f;
 
@@ -23,19 +25,24 @@ public class SoundManager : MonoBehaviour
     {
 
         main_as.spatialBlend = 0f; // 2D
+        main_as.volume = 1f;
         main_as.playOnAwake = false;
         main_as.loop = true;
         main_as.Stop();
 
         narration_as.spatialBlend = 0f; // 2D
+        narration_as.volume = 1f;
         narration_as.playOnAwake = false;
         narration_as.loop = false;
         narration_as.Stop();
 
         ending_as.spatialBlend = 0f; // 2D
+        ending_as.volume = 1f;
         ending_as.playOnAwake = false;
         ending_as.loop = false;
         ending_as.Stop();
+
+        light_as.volume = 0f;
     }
 
 
@@ -75,12 +82,31 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void stop_main_as()
+    public void turnoff_main_as()
     {
-        if (main_as != null)
+        if (main_as.isPlaying)
         {
-            main_as.Stop();
+            main_as.volume = Mathf.Lerp(main_as.volume, 0f, Time.deltaTime * 0.3f);
+            main_as.loop = false;
         }
+    }
+    public void turnoff_after_sec()
+    {
+        Invoke("turnoff_main_as", turnoffFromSec);
+    }
+
+    public void turnoff_light_as()
+    {
+        if (light_as.isPlaying)
+        {
+            light_as.volume = Mathf.Lerp(light_as.volume, 0f, Time.deltaTime * 0.3f);
+            light_as.loop = false;
+        }
+    }
+
+    public void setSceneVolume()
+    {
+        sceneMixer.SetFloat("sceneVol", -80f);
     }
 
     // public void pause_main_as()

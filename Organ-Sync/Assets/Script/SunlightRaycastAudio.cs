@@ -10,6 +10,7 @@ public class SunlightRaycastAudio : MonoBehaviour
     public LayerMask obstacleLayer;  // 牆的圖層
     public float NoLightVol = 0f; //沒光時的音量
     public float LightVol = 1f; //照光時的音量
+    [Header("物品第一次被光照到時才開始播聲音")]
     public bool first_hit = false;
 
     [Header("判斷物件使否有被光線照到")]

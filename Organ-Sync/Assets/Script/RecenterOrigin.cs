@@ -83,7 +83,7 @@ public class RecenterOrigin : MonoBehaviour
             Move_flag = true;
         }
         else if(Input.GetKey("t")){
-            MoveTo(target_2, 0.1f);
+            MoveTo(target_2, 0.5f);
         }
 
 

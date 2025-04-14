@@ -36,5 +36,10 @@ public class phone_display : MonoBehaviour
             _videoPlayer.Pause();
             M_screen.SetFloat("_pass", 0f);
         }
+
+        if(MainPipeLine.instance.State == 9f){
+            _videoPlayer.Pause();
+        }
     }
+    
 }

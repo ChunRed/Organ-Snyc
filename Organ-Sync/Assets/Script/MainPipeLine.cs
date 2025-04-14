@@ -346,20 +346,24 @@ public class MainPipeLine : MonoBehaviour
         //VR頭盔 : -5f  ->  material init
         else if(State == 7f){
 
-            //移動VR頭盔的位置
-            // if (Input.GetKey("5")) {
-            //     new_position = position2;
-            //     speed = 0;
-            // }
-
             //若 position.z < -5f 則啟用 shader_ctrl.cs
-            if(VR_Camera.transform.position.z < -5f){
-                Shader_ctrl.instance.trigger_flag = false;
-                SoundManager.instance.play_ending_as();
-                State = 8f;
+            if(VR_Camera.transform.position.z < -4.4f){
+                Shader_ctrl.instance.trigger_flag1 = false;
+                
+                State = 7.5f;
             }
         }
 
+
+        else if(State == 7.5f){
+            //若 position.z < -5.5f 則啟用 shader_ctrl.cs
+            if(VR_Camera.transform.position.z < -5f){
+                Shader_ctrl.instance.trigger_flag2 = false;
+                SoundManager.instance.play_ending_as();
+                SoundManager.instance.turnoff_after_sec();
+                State = 8f;
+            }
+        }
 
 
 
@@ -392,8 +396,10 @@ public class MainPipeLine : MonoBehaviour
         //VR頭盔 : -8f  ->  窗光關閉 離開[窗光環節]
         else if(State == 9f){
             
-            // 關閉 raycast 偵測物件效果
+            // 關閉 raycast 偵測物件效果，將光的聲音調小
             Window_Raycast_Effect = false; 
+            SoundManager.instance.turnoff_light_as();
+            SoundManager.instance.setSceneVolume();
 
             // 關閉方向光、關閉窗戶 emmision
             DAC_Light.instance.intensity = 0;
