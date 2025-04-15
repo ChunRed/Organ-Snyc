@@ -28,17 +28,22 @@ public class phone_display : MonoBehaviour
 
         trigger = _LightSensor.light_istrigger;
 
-        if(trigger == true){
-            _videoPlayer.Play();
-            M_screen.SetFloat("_pass", 1f);
-        }
-        else{
+       
+
+        if(MainPipeLine.instance.State >= 9f){
             _videoPlayer.Pause();
             M_screen.SetFloat("_pass", 0f);
+            trigger = false;
         }
-
-        if(MainPipeLine.instance.State == 9f){
-            _videoPlayer.Pause();
+        else{
+            if(trigger == true){
+                _videoPlayer.Play();
+                M_screen.SetFloat("_pass", 1f);
+            }
+            else{
+                _videoPlayer.Pause();
+                M_screen.SetFloat("_pass", 0f);
+            }
         }
     }
     

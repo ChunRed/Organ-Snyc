@@ -261,7 +261,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     - _normal: 1.84
-    - _pass: 0
+    - _pass: 1
     - _smooth: 0.67
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

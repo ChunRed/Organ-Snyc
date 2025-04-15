@@ -381,6 +381,8 @@ public class MainPipeLine : MonoBehaviour
 
                 //關閉窗光 離開[窗光環節]
                 if(Input.GetKey("6")){
+                    SoundManager.instance.turnoff_light_as();
+                    SoundManager.instance.setSceneVolume();
                     State = 9f;
                 }
             }
@@ -398,8 +400,8 @@ public class MainPipeLine : MonoBehaviour
             
             // 關閉 raycast 偵測物件效果，將光的聲音調小
             Window_Raycast_Effect = false; 
-            SoundManager.instance.turnoff_light_as();
-            SoundManager.instance.setSceneVolume();
+            
+            
 
             // 關閉方向光、關閉窗戶 emmision
             DAC_Light.instance.intensity = 0;
