@@ -31,7 +31,8 @@ public class Shader_ctrl : MonoBehaviour
 
     //糕模材質調整
     [Header("高模材質")]
-    public Material SM_Model;
+    public Material SM_Model1;
+    public Material SM_Model2;
     private float opacity = 1f;
     private float normal = 0.46f;
     private float dark = 1f;
@@ -129,9 +130,12 @@ public class Shader_ctrl : MonoBehaviour
 
 
 
-        SM_Model.SetFloat("_opacity", opacity);
-        SM_Model.SetFloat("_normal", normal);
-        SM_Model.SetFloat("_dark", dark);
+        SM_Model1.SetFloat("_opacity", opacity);
+        SM_Model1.SetFloat("_normal", normal);
+        SM_Model1.SetFloat("_dark", dark);
+        SM_Model2.SetFloat("_opacity", opacity);
+        SM_Model2.SetFloat("_normal", normal);
+        SM_Model2.SetFloat("_dark", dark);
         
         for(int i=0; i<M_List1.Count; i++){
             M_List1[i].SetFloat("_pass", Material_pass1);

@@ -8,6 +8,7 @@ public class SoundManager : MonoBehaviour
     public static SoundManager instance;
     public AudioSource main_as; // 背景音樂檔案
     public AudioSource narration_as; //旁白聲音檔
+    public AudioSource narration2_as; //旁白聲音檔
     public AudioSource ending_as; //結束音檔
     public AudioSource light_as; //direction light sound
     
@@ -41,6 +42,12 @@ public class SoundManager : MonoBehaviour
         narration_as.playOnAwake = false;
         narration_as.loop = false;
         narration_as.Stop();
+
+        narration2_as.spatialBlend = 0f; // 2D
+        narration2_as.volume = 1f;
+        narration2_as.playOnAwake = false;
+        narration2_as.loop = false;
+        narration2_as.Stop();
 
         ending_as.spatialBlend = 0f; // 2D
         ending_as.volume = 1f;
@@ -90,6 +97,14 @@ public class SoundManager : MonoBehaviour
         if (narration_as != null)
         {
             narration_as.Play();
+        }
+    }
+
+    public void play_narration2_as()
+    {
+        if (narration2_as != null)
+        {
+            narration2_as.Play();
         }
     }
 

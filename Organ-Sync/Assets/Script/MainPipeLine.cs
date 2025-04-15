@@ -284,6 +284,7 @@ public class MainPipeLine : MonoBehaviour
 
             //判斷是否達成目標      
             if (Input.GetKey("4")) {
+                SoundManager.instance.play_narration2_as();
                 State = 5f; 
             }
         }
@@ -359,6 +360,7 @@ public class MainPipeLine : MonoBehaviour
             //若 position.z < -5.5f 則啟用 shader_ctrl.cs
             if(VR_Camera.transform.position.z < -5f){
                 Shader_ctrl.instance.trigger_flag2 = false;
+                Shader_ctrl.instance.trigger_SM_Model = false;
                 SoundManager.instance.play_ending_as();
                 SoundManager.instance.turnoff_after_sec();
                 State = 8f;
