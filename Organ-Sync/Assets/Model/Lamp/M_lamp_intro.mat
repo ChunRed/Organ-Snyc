@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_lamp 1
+  m_Name: M_lamp_intro
   m_Shader: {fileID: -6465566751694194690, guid: 6f7d5a7cbd3e08e4dada67eb3d6dec92,
     type: 3}
   m_Parent: {fileID: 0}

@@ -9,20 +9,27 @@ public class SoundManager : MonoBehaviour
     public AudioSource main_as; // 背景音樂檔案
     public AudioSource narration_as; //旁白聲音檔
     public AudioSource narration2_as; //旁白聲音檔
+    
     public AudioSource ending_as; //結束音檔
     public AudioSource light_as; //direction light sound
+
+    public AudioSource LightHit_as;
     
     public AudioMixer sceneMixer;  //場景總音量控制
     public AudioMixer lightMixer;  //光總音量控制
     public float playFromSec = 0f; // 從指定秒數播放背景聲音
     public float turnoffFromSec = 0f; //幾秒後背景音樂消失
-    // public float setBgmVol = 0f; // 背景音樂音量
-    // private float lastBgmVol = 0f;
+
     public bool turnoff_main = false;
     public bool turnoff_light = false;
     public float lightVol = 0f;
     public bool turnoff_scene = false;
     public float sceneVol = 0f;
+
+    private bool narration_isPlay = false;
+    private bool narration2_isPlay = false;
+    private bool ending_isPlay = false;
+    public bool LightHitPart = false;
 
     private void Awake()
     {
@@ -56,6 +63,7 @@ public class SoundManager : MonoBehaviour
         ending_as.Stop();
 
         light_as.volume = 0f;
+        LightHit_as.volume = 0f;
     }
 
 
@@ -70,12 +78,15 @@ public class SoundManager : MonoBehaviour
         }
 
         if(turnoff_light){
-            lightVol = Mathf.Lerp(lightVol, -80f, Time.deltaTime * 0.3f);
+            lightVol = Mathf.Lerp(lightVol, -80f, Time.deltaTime * 0.2f);
+            lightMixer.SetFloat("lightVol", lightVol);
+        }else{
+            lightVol = Mathf.Lerp(lightVol, -3f, Time.deltaTime * 0.2f);
             lightMixer.SetFloat("lightVol", lightVol);
         }
 
         if(turnoff_scene){
-            sceneVol = Mathf.Lerp(sceneVol, -80f, Time.deltaTime * 0.3f);
+            sceneVol = Mathf.Lerp(sceneVol, -80f, Time.deltaTime * 0.2f);
             sceneMixer.SetFloat("sceneVol", sceneVol);
         }
     }
@@ -94,25 +105,28 @@ public class SoundManager : MonoBehaviour
 
     public void play_narration_as()
     {
-        if (narration_as != null)
+        if (narration_as != null&& !narration_isPlay)
         {
             narration_as.Play();
+            narration_isPlay = true;
         }
     }
 
     public void play_narration2_as()
     {
-        if (narration2_as != null)
+        if (narration2_as != null && !narration2_isPlay)
         {
             narration2_as.Play();
+            narration2_isPlay = true;
         }
     }
 
     public void play_ending_as()
     {
-        if (ending_as != null)
+        if (ending_as != null && !ending_isPlay)
         {
             ending_as.Play();
+            ending_isPlay = true;
         }
     }
 
@@ -143,13 +157,13 @@ public class SoundManager : MonoBehaviour
         turnoff_scene = true;
     }
 
-    // public void pause_main_as()
-    // {
-    //     if (main_as != null)
-    //     {
-    //         main_as.Pause();
-    //     }
-    // }
+    public void pause_narration_as()
+    {
+        if (narration_as != null && narration_as.isPlaying)
+        {
+            narration_as.Pause();
+        }
+    }
     // public void unPause_main_as()
     // {
     //     if (main_as != null)

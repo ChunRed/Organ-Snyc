@@ -58,9 +58,9 @@ public class RecenterOrigin : MonoBehaviour
         origin.position = Vector3.Lerp(origin.position, new_podition, easing * Move_Speed * Time.deltaTime);
 
 
-        if(Mathf.Abs(origin.position.x - new_podition.x) < 0.001f || Mathf.Abs(origin.position.z - new_podition.z) < 0.001f){
-            Move_flag = false;
-        }
+        // if(Mathf.Abs(origin.position.x - new_podition.x) < 0.001f || Mathf.Abs(origin.position.z - new_podition.z) < 0.001f){
+        //     Move_flag = false;
+        // }
         // else{
         //     origin.position +=  Move_speed;
         // }
@@ -79,7 +79,7 @@ public class RecenterOrigin : MonoBehaviour
             Recenter();
             CenterIcon.SetFloat("_pass", 1f);
         }
-        else if(Input.GetKey("5")){
+        else if(Input.GetKey("5") || MainPipeLine.instance.VR_isMove){
             Move_flag = true;
         }
         else if(Input.GetKey("t")){

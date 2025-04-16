@@ -11,6 +11,11 @@ using UnityEngine.XR;
 [DisallowMultipleComponent]
 public class ControllerKeepAlive : MonoBehaviour
 {
+    public static ControllerKeepAlive instance;
+    private void Awake(){
+        instance = this; 
+    }
+
     [Header("設定參數")]
     [Tooltip("送出保持甦醒訊號的間隔秒數（建議5~15秒）")]
     [Range(1f, 30f)]
@@ -48,7 +53,7 @@ public class ControllerKeepAlive : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= keepAliveInterval)
         {
-            SendKeepAlivePulse();
+            SendKeepAlivePulse(hapticAmplitude, hapticDuration);
             timer = 0f;
         }
     }
@@ -70,10 +75,10 @@ public class ControllerKeepAlive : MonoBehaviour
     /// <summary>
     /// 對左右控制器發送一個微弱的震動訊號，用來保持控制器活躍。
     /// </summary>
-    public void SendKeepAlivePulse()
+    public void SendKeepAlivePulse(float wake, float time)
     {
         if (rightController.isValid)
-            rightController.SendHapticImpulse(0u, hapticAmplitude, hapticDuration);
+            rightController.SendHapticImpulse(0u, wake, time);
     }
 
 

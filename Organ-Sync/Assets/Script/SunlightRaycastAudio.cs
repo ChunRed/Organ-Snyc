@@ -6,7 +6,7 @@ public class SunlightRaycastAudio : MonoBehaviour
 {
     public AudioSource audioSource;  // 音效來源
     public Light directionalLight;   // Directional Light
-    public Light[] spotlight;   //spotlight
+    // public Light[] spotlight;   //spotlight
     public LayerMask obstacleLayer;  // 牆的圖層
     public float NoLightVol = 0f; //沒光時的音量
     public float LightVol = 1f; //照光時的音量
@@ -16,6 +16,8 @@ public class SunlightRaycastAudio : MonoBehaviour
     [Header("判斷物件使否有被光線照到")]
     public bool light_istrigger = false;
 
+    
+
 
     //燈光控制
     [Header("光線參數調整")]
@@ -24,6 +26,8 @@ public class SunlightRaycastAudio : MonoBehaviour
     public Color color = new Color (180, 180, 180, 180);
     public bool control_light = true;
     private bool light_change = true;
+
+    
 
 
     void Setup(){
@@ -53,7 +57,7 @@ public class SunlightRaycastAudio : MonoBehaviour
             if (Physics.Raycast(rayOrigin, lightDirection, Mathf.Infinity, obstacleLayer))
             {
                 // Ray 碰到牆，表示玩家在陰影中
-                // Debug.Log("player NOT in Spotlight");
+                // Debug.Log("player NOT in light");
                 audioSource.volume = Mathf.Lerp(audioSource.volume, NoLightVol, Time.deltaTime * 3f);
 
                 if(!light_change){
@@ -68,21 +72,21 @@ public class SunlightRaycastAudio : MonoBehaviour
             else
             {
                 // 沒有碰到牆，表示玩家在光束內
-                // Debug.Log("player in Spotlight");
+                // Debug.Log("player in light");
                 if(!first_hit){
                     audioSource.Play();
                     first_hit = true;
                 }else{
                     audioSource.volume = Mathf.Lerp(audioSource.volume, LightVol, Time.deltaTime * 3f);
                 }
+
                 
-
-
                 if(control_light && light_change){
                     DAC_Light.instance.intensity = intensity;
                     DAC_Light.instance.color = color;
                     light_change = false;
                     light_istrigger = true;
+                    ControllerKeepAlive.instance.SendKeepAlivePulse(0.8f, 0.5f);
                 }
             }
         }

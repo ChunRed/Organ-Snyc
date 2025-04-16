@@ -9,10 +9,12 @@ public class MainPipeLine : MonoBehaviour
     public static MainPipeLine instance;
  
     
-    
+    //VR腳色參數
+    [Header("VR腳色參數")]
     public GameObject VR_Camera;
     public GameObject VR_Passthrough;
     public GameObject volume;
+    public bool VR_isMove = false;
 
     public GameObject p1_model;
     public GameObject p1_light;
@@ -37,8 +39,10 @@ public class MainPipeLine : MonoBehaviour
     [Header("燈光觸發")]
     public bool Directional_Light = false;
     public bool Window_Raycast_Effect = false;
+    public bool Lamp_Raycast_Effect = false;
     public bool Light_Object = false;
     public bool  ambient_light = false;
+    private float lamp_pass_count = 0f;
 
 
 
@@ -47,6 +51,7 @@ public class MainPipeLine : MonoBehaviour
     //UI
     [Header("UI參數")]
     public TMPro.TextMeshProUGUI FPS; 
+    public TMPro.TextMeshProUGUI STATE; 
     public GameObject intro;
     public Material M_hand_icon_UD;
     public Material M_hand_icon_RL;
@@ -61,6 +66,8 @@ public class MainPipeLine : MonoBehaviour
     float Intro_trigger_count_2 = 1f;
     float Intro_trigger_count_3 = 1f;
     private  HDAdditionalLightData Intro_Light;
+    [Header("state4 目標說明UI文字")]
+    public Material intro_text;
     //UI
 
 
@@ -70,18 +77,31 @@ public class MainPipeLine : MonoBehaviour
     public GameObject Smooth_Model;
 
 
-    //檯燈亮起的延遲時間
+    //等待延遲的延遲時間
+    [Header("檯燈亮起的延遲時間")]
     [Range(0f, 50f)]
     public float Lamp_trigger_delay = 35f;
+    [Header("教學開始的延遲時間")]
+    [Range(0f, 120f)]
+    public float Intro_trigger_delay = 5f;
+    [Header("窗光環節體驗時間")]
+    [Range(0f, 180f)]
+    public float VRmove_trigger_delay = 120f;
+
+
+
+
+    [Header("台燈光感測")]
+    public GameObject lamp_light_sensor;
+    SpotLight_raycast _lamp_light_sensor;
 
     private int lastFrameIndex;
     private float[] frameDeltaTimeArray;
-
     private bool soundStart = false;
+    private bool IEnumerator_flag = false;
 
-
-    //video player
-    //private VideoPlayer _videoPlayer;
+    //手把震動觸發
+    ControllerKeepAlive _ControllerKeepAlive;
 
 
     private void Awake(){
@@ -115,6 +135,9 @@ public class MainPipeLine : MonoBehaviour
         M_intro_model.SetFloat("_pass", Intro_trigger_count_3);
         Intro_Light = intro.GetComponent<HDAdditionalLightData>();
         Intro_Light.intensity = 0;
+
+        _lamp_light_sensor = lamp_light_sensor.GetComponent<SpotLight_raycast>();
+        _ControllerKeepAlive = GetComponent<ControllerKeepAlive>();
     }
 
     
@@ -134,7 +157,7 @@ public class MainPipeLine : MonoBehaviour
         else speed = Move_Speed*0.01f;
 
 
-
+        STATE.text = "STATE : " + State;
 
 
 
@@ -175,7 +198,15 @@ public class MainPipeLine : MonoBehaviour
                 SoundManager.instance.play_after_sec();
                 SoundManager.instance.play_narration_as();
 
-                StartCoroutine(WaitChangeState(1f, Lamp_trigger_delay));
+                //觸發手把震動
+                _ControllerKeepAlive.autoKeepAlive = true;
+
+                //自動執行控制
+                if (!IEnumerator_flag){
+                    IEnumerator_flag = true;
+                    StartCoroutine(WaitChangeState(20f, 1f, Lamp_trigger_delay)); // Lamp_trigger_delay => 35f
+                    
+                }
             }
         }
 
@@ -192,14 +223,24 @@ public class MainPipeLine : MonoBehaviour
             DAC_Light.instance.Lamp_intensity = 5000;
             DAC_Light.instance.Lamp_color = Color.white;
             DAC_Light.instance.Lamp_Smooth = 0.02f;
+            Lamp_Raycast_Effect = true;
 
-            //判斷音檔使否撥放完畢      
+            //判斷音檔使否撥放完畢 
             if (Input.GetKey("1")) {
                 if(soundStart == false){
                     SoundManager.instance.play_main_as();
                 }
                 State = 2f; 
             }
+
+
+            //自動執行控制
+            if (!IEnumerator_flag){
+                IEnumerator_flag = true;
+                StartCoroutine(WaitChangeState(1f, 2f, Intro_trigger_delay));
+                
+            }
+            
         }
 
 
@@ -226,9 +267,17 @@ public class MainPipeLine : MonoBehaviour
             A_hand.SetBool("up_down", true);
             A_light.SetBool("up_down", true);
 
-            //判斷是否達成目標      
+
+            //手動執行控制      
             if (Input.GetKey("2")) {
                 State = 3f; 
+            }
+
+            //自動執行控制
+            if (!IEnumerator_flag){
+                IEnumerator_flag = true;
+                StartCoroutine(WaitChangeState(2f, 3f, 17.5f));
+                
             }
         }
 
@@ -254,9 +303,15 @@ public class MainPipeLine : MonoBehaviour
             A_hand.SetBool("left_right", true);
             A_light.SetBool("left_right", true);
 
-            //判斷是否達成目標      
+            //手動執行控制       
             if (Input.GetKey("3")) {
                 State = 4f; 
+            }
+
+            //自動執行控制
+            if (!IEnumerator_flag){
+                IEnumerator_flag = true;
+                StartCoroutine(WaitChangeState(3f, 4f, 17.5f));
             }
         }
 
@@ -270,8 +325,9 @@ public class MainPipeLine : MonoBehaviour
         //關閉燈光操作說明環節
         //達成指定目標後進入 "窗光環節"
         else if(State == 4f){
-
-
+            //state4 顯示目標說明UI文字
+            intro_text.SetFloat("_pass", 1f);
+            
 
             //停止 " 左右操作 " 動畫
             A_hand.SetBool("left_right", false);
@@ -281,12 +337,27 @@ public class MainPipeLine : MonoBehaviour
             TriggerIntro(true, 2);
             TriggerIntro(true, 3);
 
+            //開啟計時音效
+            SoundManager.instance.LightHitPart = true;
 
-            //判斷是否達成目標      
-            if (Input.GetKey("4")) {
-                SoundManager.instance.play_narration2_as();
-                State = 5f; 
+            //判斷是否達成目標
+            //台燈照自己超過5秒 
+            if (_lamp_light_sensor.light_istrigger) {
+                if(lamp_pass_count > 5f) {
+                    State = 5f; 
+                    //state4 關閉目標說明UI文字
+                    intro_text.SetFloat("_pass", 0f);
+                }
+                else lamp_pass_count += Time.deltaTime;
             }
+            else lamp_pass_count = 0f;
+
+            if (Input.GetKey("4")) {
+                State = 5f; 
+                //state4 關閉目標說明UI文字
+                intro_text.SetFloat("_pass", 0f);
+            }
+
         }
 
 
@@ -303,6 +374,10 @@ public class MainPipeLine : MonoBehaviour
         //======================================================================
         // 進入[窗光環節] 關閉檯燈
         else if(State == 5f){
+            
+            //關閉計時音效
+            SoundManager.instance.LightHitPart = false;
+            SoundManager.instance.turnoff_light = true;
 
             //刪除所有 Intro 物件
             Destroy(intro);
@@ -311,13 +386,13 @@ public class MainPipeLine : MonoBehaviour
             DAC_Light.instance.Lamp_intensity = 0;
             DAC_Light.instance.Lamp_color = Color.black;
             DAC_Light.instance.Lamp_Smooth = 2f;
-
-           
-
-            // 開啟 raycast 偵測物件效果
-            Window_Raycast_Effect = true;   
                     
-            StartCoroutine(WaitChangeState(6f, 15f));
+            
+            //自動執行控制
+            if (!IEnumerator_flag){
+                StartCoroutine(WaitChangeState(5f, 6f, 15f));
+                IEnumerator_flag = true;
+            }
         }
 
 
@@ -330,13 +405,39 @@ public class MainPipeLine : MonoBehaviour
             DAC_Light.instance.intensity = 4000;
             DAC_Light.instance.color = Color.white;
             Directional_Light = true;
+            // 若旁白1未結束，停止旁白1
+            SoundManager.instance.pause_narration_as();
+
+            //旁白2開始
+            SoundManager.instance.play_narration2_as();
+            SoundManager.instance.turnoff_light = false;
 
             // 開啟發亮物件
             Light_Object = true;
 
-            State = 7f;
+            // 開啟 raycast 偵測物件效果
+            Window_Raycast_Effect = true;   
+
+            //自動執行控制
+            if (!IEnumerator_flag){
+                StartCoroutine(WaitChangeState(6f, 6.5f, 15f));
+                IEnumerator_flag = true;
+            }
         }
 
+
+
+        //MARK:STATE - 6.5
+        //======================================================================
+        //======================================================================
+        //窗光環節體驗時間
+        else if(State == 6.5f){
+            //自動執行控制
+            if (!IEnumerator_flag){
+                StartCoroutine(WaitChangeState(6.5f, 7f, VRmove_trigger_delay));
+                IEnumerator_flag = true;
+            }
+        }
 
 
 
@@ -344,23 +445,35 @@ public class MainPipeLine : MonoBehaviour
         //MARK:STATE - 7
         //======================================================================
         //======================================================================
-        //VR頭盔 : -5f  ->  material init
+        //VR頭盔頭盔開始移動
+        //VR頭盔 : -4.4f  ->  材質群組一 啟用
         else if(State == 7f){
 
+            //觸發VR頭盔頭盔移動
+            VR_isMove = true;
+                
             //若 position.z < -5f 則啟用 shader_ctrl.cs
             if(VR_Camera.transform.position.z < -4.4f){
                 Shader_ctrl.instance.trigger_flag1 = false;
-                
                 State = 7.5f;
             }
         }
 
 
+
+        //MARK:STATE - 7.5
+        //======================================================================
+        //======================================================================
+        //VR頭盔 : -5f  ->  材質群組二 啟用
+        //觸發飄起物件時的BGM
         else if(State == 7.5f){
             //若 position.z < -5.5f 則啟用 shader_ctrl.cs
             if(VR_Camera.transform.position.z < -5f){
+                //材質群組二 啟用
                 Shader_ctrl.instance.trigger_flag2 = false;
                 Shader_ctrl.instance.trigger_SM_Model = false;
+
+                //觸發飄起物件時的BGM
                 SoundManager.instance.play_ending_as();
                 SoundManager.instance.turnoff_after_sec();
                 State = 8f;
@@ -382,10 +495,10 @@ public class MainPipeLine : MonoBehaviour
                 Destroy(Smooth_Model);
 
                 //關閉窗光 離開[窗光環節]
-                if(Input.GetKey("6")){
-                    SoundManager.instance.turnoff_light_as();
-                    SoundManager.instance.setSceneVolume();
-                    State = 9f;
+                //自動執行控制
+                if (!IEnumerator_flag){
+                    StartCoroutine(WaitChangeState(8f, 9f, 120f));
+                    IEnumerator_flag = true;
                 }
             }
         }
@@ -399,6 +512,10 @@ public class MainPipeLine : MonoBehaviour
         //======================================================================
         //VR頭盔 : -8f  ->  窗光關閉 離開[窗光環節]
         else if(State == 9f){
+
+            //關閉聲音
+            SoundManager.instance.turnoff_light_as();
+            SoundManager.instance.setSceneVolume();
             
             // 關閉 raycast 偵測物件效果，將光的聲音調小
             Window_Raycast_Effect = false; 
@@ -412,7 +529,7 @@ public class MainPipeLine : MonoBehaviour
             // 關閉發亮物件
             Light_Object = false;
 
-            StartCoroutine(WaitChangeState(10f, 30f));
+            StartCoroutine(WaitChangeState(9f, 10f, 30f));
         }
 
 
@@ -481,17 +598,16 @@ public class MainPipeLine : MonoBehaviour
     
 
 
-    IEnumerator WaitChangeState(float state, float time){ 
+    IEnumerator WaitChangeState(float from_state, float to_state, float time){ 
 
-        State = 20f;
-        yield return new WaitForSeconds(time);
-        State = state;
+        float startTime = Time.time;
+        while (Time.time - startTime < time)
+        {
+            yield return null; // 每一幀都檢查一次時間
+        }
 
-        //play video in state 1
-        // if(state == 1f){
-        //     _videoPlayer.isLooping = false;
-        //     _videoPlayer.Play();
-        // }
+        State = to_state;
+        IEnumerator_flag = false;
     }
 
 

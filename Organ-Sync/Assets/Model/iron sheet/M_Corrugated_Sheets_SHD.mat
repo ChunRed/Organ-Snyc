@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Corrugated_Sheets_SHD
+  m_Name: M_Corrugated_Sheets_SHD
   m_Shader: {fileID: -6465566751694194690, guid: aefc63699cf4eff49a6bbb7c9ef5d160,
     type: 3}
   m_Parent: {fileID: 0}
@@ -230,7 +230,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 0
     - _normal_Strength: 0.64
-    - _pass: 1
+    - _pass: 0
     m_Colors:
     - _BASE_COLOR: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
