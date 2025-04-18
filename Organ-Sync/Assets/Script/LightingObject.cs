@@ -19,7 +19,7 @@ public class LightingObject : MonoBehaviour
     
     void Update()
     {
-        if(MainPipeLine.instance.State != 10f){
+        if(MainPipeLine.instance.DestroyModel == false){
             if(MainPipeLine.instance.Light_Object){
                 reflection_probe.SetActive(true);
                 for(int i=0; i<M_List.Count; i++){

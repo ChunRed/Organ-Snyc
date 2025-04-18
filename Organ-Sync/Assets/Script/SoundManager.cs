@@ -11,6 +11,7 @@ public class SoundManager : MonoBehaviour
     public AudioSource narration2_as; //旁白聲音檔
     
     public AudioSource ending_as; //結束音檔
+    public AudioSource ambientPass_as; //無邊及passthrough
     public AudioSource light_as; //direction light sound
 
     public AudioSource LightHit_as;
@@ -29,6 +30,7 @@ public class SoundManager : MonoBehaviour
     private bool narration_isPlay = false;
     private bool narration2_isPlay = false;
     private bool ending_isPlay = false;
+    private bool ambientPass_isPlay = false;
     public bool LightHitPart = false;
 
     private void Awake()
@@ -61,6 +63,12 @@ public class SoundManager : MonoBehaviour
         ending_as.playOnAwake = false;
         ending_as.loop = false;
         ending_as.Stop();
+
+        ambientPass_as.spatialBlend = 0f; // 2D
+        ambientPass_as.volume = 1f;
+        ambientPass_as.playOnAwake = false;
+        ambientPass_as.loop = false;
+        ambientPass_as.Stop();
 
         light_as.volume = 0f;
         LightHit_as.volume = 0f;
@@ -127,6 +135,15 @@ public class SoundManager : MonoBehaviour
         {
             ending_as.Play();
             ending_isPlay = true;
+        }
+    }
+
+    public void play_ambientPass_as()
+    {
+        if (ambientPass_as != null && !ambientPass_isPlay)
+        {
+            ambientPass_as.Play();
+            ambientPass_isPlay = true;
         }
     }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.XR.CoreUtils;
+using UnityEngine.XR;
 
 public class RecenterOrigin : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class RecenterOrigin : MonoBehaviour
     public Transform target_2;
     public Transform target_3;
 
-    public Material CenterIcon;
+    public Material VR_CenterIcon;
+    public Material LAMP_CenterIcon;
 
     public bool Move_flag = false;
     [Header("移動速度")]
@@ -24,6 +26,11 @@ public class RecenterOrigin : MonoBehaviour
     public float easing = 0f;
 
     float current_percent = 0f;
+
+
+    //controllers操作變數
+    private InputDevice rightController;
+    
 
     public void Recenter(){
         Vector3 offset = head.position - origin.position;
@@ -39,8 +46,6 @@ public class RecenterOrigin : MonoBehaviour
         float angle = Vector3.SignedAngle(cameraForward, targetForward, Vector3.up);
 
         origin.RotateAround(head.position, Vector3.up, angle);
-
-        Invoke("HideIcon", 5f);
     }
 
 
@@ -56,14 +61,23 @@ public class RecenterOrigin : MonoBehaviour
 
 
         origin.position = Vector3.Lerp(origin.position, new_podition, easing * Move_Speed * Time.deltaTime);
+    }
 
 
-        // if(Mathf.Abs(origin.position.x - new_podition.x) < 0.001f || Mathf.Abs(origin.position.z - new_podition.z) < 0.001f){
-        //     Move_flag = false;
-        // }
-        // else{
-        //     origin.position +=  Move_speed;
-        // }
+
+    // 找到右手的控制器
+    void GetController(){
+        var inputDevices = new List<InputDevice>();
+        InputDevices.GetDevicesAtXRNode(XRNode.RightHand, inputDevices);
+
+        if (inputDevices.Count > 0)
+        {
+            rightController = inputDevices[0];
+        }
+
+        if(MainPipeLine.instance.State == 1f){
+            CancelInvoke("GetComponent");
+        }
     }
 
 
@@ -71,13 +85,18 @@ public class RecenterOrigin : MonoBehaviour
     void Start()
     {
         Recenter();
+        InvokeRepeating("GetController", 1f, 1f);
     }
+
+
+    
 
     void Update()
     {
         if (Input.GetKey("r")) {
             Recenter();
-            CenterIcon.SetFloat("_pass", 1f);
+            VR_CenterIcon.SetFloat("_pass", 1f);
+            LAMP_CenterIcon.SetFloat("_pass", 1f);
         }
         else if(Input.GetKey("5") || MainPipeLine.instance.VR_isMove){
             Move_flag = true;
@@ -91,15 +110,44 @@ public class RecenterOrigin : MonoBehaviour
             MoveTo(target_2, Move_speed);
         }
 
+
+        //手把控制
+        if (rightController.isValid)
+        {
+            // A 按鈕（通常是primaryButton）
+            bool aButtonPressed;
+            if (rightController.TryGetFeatureValue(CommonUsages.primaryButton, out aButtonPressed) && aButtonPressed)
+            {
+                //Debug.Log("A 按鈕被按下");
+            }
+
+            // Trigger
+            float triggerValue;
+            if (rightController.TryGetFeatureValue(CommonUsages.trigger, out triggerValue) && triggerValue > 0.5f)
+            {
+                Recenter();
+                VR_CenterIcon.SetFloat("_pass", 1f);
+                LAMP_CenterIcon.SetFloat("_pass", 1f);
+            }
+            else{
+                VR_CenterIcon.SetFloat("_pass", 0f);
+                LAMP_CenterIcon.SetFloat("_pass", 0f);
+            }
+
+            // Grip
+            float gripValue;
+            if (rightController.TryGetFeatureValue(CommonUsages.grip, out gripValue) && gripValue > 0.1f)
+            {
+                //Debug.Log($"Grip 被按壓，數值: {gripValue}");
+            }
+        }
+
     }
 
 
 
 
 
-    void HideIcon(){
-        CenterIcon.SetFloat("_pass", 0f);
-    }
 
 
     float Remap (float value, float from1, float to1, float from2, float to2) {

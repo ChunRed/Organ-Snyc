@@ -76,7 +76,7 @@ public class Shader_ctrl : MonoBehaviour
             pp.shake.value = Mathf.Lerp(pp.shake.value, Shake, PPLerp_Speed * Time.deltaTime);
             
         }
-        if(_self_raycast.light_istrigger) Jump = 0.05f;
+        if(_self_raycast.light_istrigger) Jump = 0.02f;
         else Jump = 0f;
 
         

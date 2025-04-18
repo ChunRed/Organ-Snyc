@@ -31,11 +31,12 @@ public class video_manager : MonoBehaviour
         }
         else if(MainPipeLine.instance.State == 10f && pass_state != MainPipeLine.instance.State){
             _videoPlayer.clip = ambient_clip;
-            _videoPlayer.isLooping = true;
+            _videoPlayer.isLooping = false;
             _videoPlayer.Play();
 
             pass_state = MainPipeLine.instance.State;
         }
+        
         
     }
 }

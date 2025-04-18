@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.Rendering.HighDefinition;
+using UnityEngine.XR;
 
 public class MainPipeLine : MonoBehaviour
 {
@@ -45,7 +46,6 @@ public class MainPipeLine : MonoBehaviour
     private float lamp_pass_count = 0f;
 
 
-
     OVRPassthroughLayer passthrough;
     
     //UI
@@ -75,6 +75,7 @@ public class MainPipeLine : MonoBehaviour
     [Header("場景模型")]
     public GameObject Model;
     public GameObject Smooth_Model;
+    public bool DestroyModel = false;
 
 
     //等待延遲的延遲時間
@@ -102,6 +103,8 @@ public class MainPipeLine : MonoBehaviour
 
     //手把震動觸發
     ControllerKeepAlive _ControllerKeepAlive;
+    //Passthrough變數
+    passthroughControl _passthroughControl;
 
 
     private void Awake(){
@@ -138,6 +141,9 @@ public class MainPipeLine : MonoBehaviour
 
         _lamp_light_sensor = lamp_light_sensor.GetComponent<SpotLight_raycast>();
         _ControllerKeepAlive = GetComponent<ControllerKeepAlive>();
+        _passthroughControl = GetComponent<passthroughControl>();
+
+
     }
 
     
@@ -192,6 +198,12 @@ public class MainPipeLine : MonoBehaviour
             // 關閉發亮物件
             Light_Object = false;
 
+
+            //Passthrough
+            if(soundStart == false) _passthroughControl.LerpPassthrough(0.5f, 5f);
+            else _passthroughControl.LerpPassthrough(0f, 0.5f);
+
+
             //判斷是否開始進入旁白
             if(Input.GetKey("n") && soundStart == false){
                 soundStart = true;
@@ -201,10 +213,12 @@ public class MainPipeLine : MonoBehaviour
                 //觸發手把震動
                 _ControllerKeepAlive.autoKeepAlive = true;
 
+                _passthroughControl.LerpPassthrough(0f, 0.5f);
+
                 //自動執行控制
                 if (!IEnumerator_flag){
                     IEnumerator_flag = true;
-                    StartCoroutine(WaitChangeState(20f, 1f, Lamp_trigger_delay)); // Lamp_trigger_delay => 35f
+                    StartCoroutine(WaitChangeState(0f, 1f, Lamp_trigger_delay)); // Lamp_trigger_delay => 35f
                     
                 }
             }
@@ -218,6 +232,9 @@ public class MainPipeLine : MonoBehaviour
         //======================================================================
         //開啟檯燈並等待音檔撥放完畢 ( 用檯燈照自己 ) 
         else if(State == 1f){
+
+            //Passthrough
+            _passthroughControl.LerpPassthrough(0f, 0.5f);
             
             // 開啟台燈光
             DAC_Light.instance.Lamp_intensity = 5000;
@@ -513,13 +530,13 @@ public class MainPipeLine : MonoBehaviour
         //VR頭盔 : -6.3f  ->  物件飄起
         else if(State == 8f){
 
-            //若 position.z < -7.7f 則啟用 Glitch效果
-            if(VR_Camera.transform.position.z < -7.7f){
+            //若 position.z < -7.5f 則啟用 Glitch效果
+            if(VR_Camera.transform.position.z < -7.5f){
 
                 //pp glitch 調整 lerp 速度
-                Shader_ctrl.instance.PPLerp_Speed = 0.05f;
+                Shader_ctrl.instance.PPLerp_Speed = 0.07f;
                 
-                Shader_ctrl.instance.Jitter = 0.2f;
+                Shader_ctrl.instance.Jitter = 0.3f;
                 Shader_ctrl.instance.Block = 0.1f;
                 Shader_ctrl.instance.Shake = 0.015f;
 
@@ -558,6 +575,8 @@ public class MainPipeLine : MonoBehaviour
             
             // 關閉發亮物件
             Light_Object = false;
+            DestroyModel = true;
+            
 
             StartCoroutine(WaitChangeState(9f, 10f, 30f));
         }
@@ -571,7 +590,7 @@ public class MainPipeLine : MonoBehaviour
         else if(State == 10f){
 
             //pp glitch 調整 
-            Shader_ctrl.instance.PPLerp_Speed = 0.5f;
+            Shader_ctrl.instance.PPLerp_Speed = 5f;
                 
             Shader_ctrl.instance.Jitter = 0f;
             Shader_ctrl.instance.Block = 0f;
@@ -583,9 +602,29 @@ public class MainPipeLine : MonoBehaviour
             //開啟無邊燈光
             ambient_light = true;
 
-            //開啟無邊light sensor
+            //播放無邊聲音檔
+            SoundManager.instance.play_ambientPass_as();
+
+            //自動執行控制
+            if (!IEnumerator_flag){
+                StartCoroutine(WaitChangeState(10f, 11f, 85f));
+                IEnumerator_flag = true;
+            }
+
+            
 
         }
+
+
+        //MARK:STATE - 11
+        //======================================================================
+        //======================================================================
+        //進入 [Passthrough] 環節
+        else if(State == 11f){
+            //Passthrough
+            _passthroughControl.LerpPassthrough(0.2f, 0.1f);
+        }
+
 
     }
 
