@@ -276,7 +276,7 @@ public class MainPipeLine : MonoBehaviour
             //自動執行控制
             if (!IEnumerator_flag){
                 IEnumerator_flag = true;
-                StartCoroutine(WaitChangeState(2f, 3f, 17.5f));
+                StartCoroutine(WaitChangeState(2f, 3f, 16f));
                 
             }
         }
@@ -311,7 +311,7 @@ public class MainPipeLine : MonoBehaviour
             //自動執行控制
             if (!IEnumerator_flag){
                 IEnumerator_flag = true;
-                StartCoroutine(WaitChangeState(3f, 4f, 17.5f));
+                StartCoroutine(WaitChangeState(3f, 4f, 16f));
             }
         }
 
@@ -326,7 +326,7 @@ public class MainPipeLine : MonoBehaviour
         //達成指定目標後進入 "窗光環節"
         else if(State == 4f){
             //state4 顯示目標說明UI文字
-            intro_text.SetFloat("_pass", 1f);
+            //intro_text.SetFloat("_pass", 1f);
             
 
             //停止 " 左右操作 " 動畫
@@ -343,19 +343,27 @@ public class MainPipeLine : MonoBehaviour
             //判斷是否達成目標
             //台燈照自己超過5秒 
             if (_lamp_light_sensor.light_istrigger) {
+
+                //pp glitch jitter 效果設為0
+                Shader_ctrl.instance.Jitter = 0.6f;
+
                 if(lamp_pass_count > 5f) {
                     State = 5f; 
                     //state4 關閉目標說明UI文字
-                    intro_text.SetFloat("_pass", 0f);
+                    //intro_text.SetFloat("_pass", 0f);
                 }
                 else lamp_pass_count += Time.deltaTime;
             }
-            else lamp_pass_count = 0f;
+            else {
+                lamp_pass_count = 0f;
+                //pp glitch jitter 效果設為0
+                Shader_ctrl.instance.Jitter = 0f;
+            }
 
             if (Input.GetKey("4")) {
                 State = 5f; 
                 //state4 關閉目標說明UI文字
-                intro_text.SetFloat("_pass", 0f);
+                //intro_text.SetFloat("_pass", 0f);
             }
 
         }
@@ -374,6 +382,9 @@ public class MainPipeLine : MonoBehaviour
         //======================================================================
         // 進入[窗光環節] 關閉檯燈
         else if(State == 5f){
+
+            //pp glitch jump 效果設為0.2
+            Shader_ctrl.instance.Jitter = 0.4f;
             
             //關閉計時音效
             SoundManager.instance.LightHitPart = false;
@@ -402,6 +413,12 @@ public class MainPipeLine : MonoBehaviour
         //======================================================================
         // 開啟方向光、開啟窗戶 emmision
         else if(State == 6f){
+
+            //pp glitch jitter 效果設為0
+            Shader_ctrl.instance.Jitter = 0f;
+            //pp glitch jump 效果設為0.2
+            Shader_ctrl.instance.Jitter = 0f;
+
             DAC_Light.instance.intensity = 4000;
             DAC_Light.instance.color = Color.white;
             Directional_Light = true;
@@ -476,7 +493,14 @@ public class MainPipeLine : MonoBehaviour
                 //觸發飄起物件時的BGM
                 SoundManager.instance.play_ending_as();
                 SoundManager.instance.turnoff_after_sec();
-                State = 8f;
+                
+
+                //關閉窗光 離開[窗光環節]
+                //自動執行控制
+                if (!IEnumerator_flag){
+                    StartCoroutine(WaitChangeState(8f, 9f, 150f));
+                    IEnumerator_flag = true;
+                }
             }
         }
 
@@ -489,17 +513,23 @@ public class MainPipeLine : MonoBehaviour
         //VR頭盔 : -6.3f  ->  物件飄起
         else if(State == 8f){
 
-            //若 position.z < -6.3f 則啟用 gravity_translate.cs
-            if(VR_Camera.transform.position.z < -5.8f){
+            //若 position.z < -7.7f 則啟用 Glitch效果
+            if(VR_Camera.transform.position.z < -7.7f){
+
+                //pp glitch 調整 lerp 速度
+                Shader_ctrl.instance.PPLerp_Speed = 0.05f;
+                
+                Shader_ctrl.instance.Jitter = 0.2f;
+                Shader_ctrl.instance.Block = 0.1f;
+                Shader_ctrl.instance.Shake = 0.015f;
+
+            }
+            //若 position.z < -5.8f 則啟用 gravity_translate.cs
+            else if(VR_Camera.transform.position.z < -5.8f){
+
                 model_float = true;
                 Destroy(Smooth_Model);
 
-                //關閉窗光 離開[窗光環節]
-                //自動執行控制
-                if (!IEnumerator_flag){
-                    StartCoroutine(WaitChangeState(8f, 9f, 120f));
-                    IEnumerator_flag = true;
-                }
             }
         }
 
@@ -539,6 +569,13 @@ public class MainPipeLine : MonoBehaviour
         //======================================================================
         //進入 [無邊] 環節
         else if(State == 10f){
+
+            //pp glitch 調整 
+            Shader_ctrl.instance.PPLerp_Speed = 0.5f;
+                
+            Shader_ctrl.instance.Jitter = 0f;
+            Shader_ctrl.instance.Block = 0f;
+            Shader_ctrl.instance.Shake = 0f;
             
             //刪除模型
             Destroy(Model);
@@ -600,6 +637,7 @@ public class MainPipeLine : MonoBehaviour
 
     IEnumerator WaitChangeState(float from_state, float to_state, float time){ 
 
+        State = from_state;
         float startTime = Time.time;
         while (Time.time - startTime < time)
         {
@@ -617,15 +655,15 @@ public class MainPipeLine : MonoBehaviour
     void TriggerIntro(bool trigger, int state){
         if(trigger){
             if(state == 1){
-                if(Intro_trigger_count_1 < 1f) Intro_trigger_count_1 += 0.01f;
+                if(Intro_trigger_count_1 < 1f) Intro_trigger_count_1 += 0.02f;
                 else Intro_trigger_count_1 = 1f;
             }
             else if(state == 2){
-                if(Intro_trigger_count_2 < 1f) Intro_trigger_count_2 += 0.01f;
+                if(Intro_trigger_count_2 < 1f) Intro_trigger_count_2 += 0.02f;
                 else Intro_trigger_count_2 = 1f;
             }
             else if(state == 3){
-                if(Intro_trigger_count_3 < 1f) Intro_trigger_count_3 += 0.01f;
+                if(Intro_trigger_count_3 < 1f) Intro_trigger_count_3 += 0.02f;
                 else Intro_trigger_count_3 = 1f;
             }
             
@@ -633,15 +671,15 @@ public class MainPipeLine : MonoBehaviour
         else{
 
             if(state == 1){
-                if(Intro_trigger_count_1 > 0f) Intro_trigger_count_1 -= 0.01f;
+                if(Intro_trigger_count_1 > 0f) Intro_trigger_count_1 -= 0.02f;
                 else Intro_trigger_count_1 = 0f;
             }
             else if(state == 2){
-                if(Intro_trigger_count_2 > 0f) Intro_trigger_count_2 -= 0.01f;
+                if(Intro_trigger_count_2 > 0f) Intro_trigger_count_2 -= 0.02f;
                 else Intro_trigger_count_2 = 0f;
             }
             else if(state == 3){
-                if(Intro_trigger_count_3 > 0f) Intro_trigger_count_3 -= 0.01f;
+                if(Intro_trigger_count_3 > 0f) Intro_trigger_count_3 -= 0.02f;
                 else Intro_trigger_count_3 = 0f;
             }
         }

@@ -163,6 +163,34 @@ MonoBehaviour:
   saturation:
     m_OverrideState: 0
     m_Value: -69
+--- !u!114 &-5653641054906646562
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 090e3e4eec7ad5a47b778575e0ede947, type: 3}
+  m_Name: Glitch
+  m_EditorClassIdentifier: 
+  active: 1
+  block:
+    m_OverrideState: 1
+    m_Value: 0
+  drift:
+    m_OverrideState: 1
+    m_Value: 0
+  jitter:
+    m_OverrideState: 1
+    m_Value: 0
+  jump:
+    m_OverrideState: 1
+    m_Value: 0
+  shake:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,6 +208,7 @@ MonoBehaviour:
   - {fileID: -7037355424936526619}
   - {fileID: -8749311766939738110}
   - {fileID: 7216068526902951285}
+  - {fileID: -5653641054906646562}
 --- !u!114 &7216068526902951285
 MonoBehaviour:
   m_ObjectHideFlags: 3
