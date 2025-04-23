@@ -86,7 +86,7 @@ public class SunlightRaycastAudio : MonoBehaviour
                     DAC_Light.instance.color = color;
                     light_change = false;
                     light_istrigger = true;
-                    ControllerKeepAlive.instance.SendKeepAlivePulse(0.8f, 0.5f);
+                    //ControllerKeepAlive.instance.SendKeepAlivePulse(0.8f, 0.5f);
                 }
             }
         }

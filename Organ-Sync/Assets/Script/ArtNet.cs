@@ -34,12 +34,14 @@ public class ArtNet:MonoBehaviour
 
     public GameObject tartget;
 
-    
+    [Header("UI參數")]
+    public TMPro.TextMeshProUGUI POSX; 
+    public TMPro.TextMeshProUGUI POSY; 
+    public bool Reset_button = false;
     
 
-
-    public void Start()
-    {
+    
+    public void ArtNet_Init(){
         _target = new IPEndPoint(IPAddress.Parse(_destinationIP), 6454);
 
         _socket = new UdpClient();
@@ -76,6 +78,13 @@ public class ArtNet:MonoBehaviour
         _artNetPacket[16] = ((512 >> 8) & 0xFF);
         _artNetPacket[17] = (512 & 0xFF);
     }
+    
+
+
+    public void Start()
+    {
+        ArtNet_Init();
+    }
 
     
     
@@ -101,29 +110,42 @@ public class ArtNet:MonoBehaviour
     public void Update()
     {   
         Vector3 posotion = DAC_Light.instance.Artnet_currentAngle;
-        int new_X = posotion.x + 127 > 254 ? 254 : (int)posotion.x + 127;
-        int new_Y = posotion.y + 127 > 254 ? 254 : (int)posotion.y + 127;
+        int new_Y = ((int)posotion.x)  > 254 ? 254 : ((int)posotion.x);
+        int new_X = posotion.y > 254 ? 254 : (int)posotion.y;
 
+        new_Y = new_Y < 0 ? 0 : new_Y;
+        new_X = new_X < 0 ? 0 : new_X;
+
+
+
+        POSX.text = "Hand PosX : " + (int)posotion.y + " : " + new_X;
+        POSY.text = "Hand PosY : " + (int)posotion.x + " : " + new_Y;
 
 
         _intervalTime = 1f / _DMX_fps;
+
 
         if (Time.time - _lastTxTime >= _intervalTime)
         {
             _lastTxTime = Time.time;
 
-           
 
-            _data[2] = Convert.ToByte( new_X);
-            _data[0] = Convert.ToByte( new_Y);
-
-            tx();
+            if(MainPipeLine.instance.DMX_trigger){
+                _data[1] = Convert.ToByte( new_Y);
+                _data[0] = Convert.ToByte( new_X);
+                tx();
+            }
+            else{
+                _data[1] = Convert.ToByte( 0 );
+                _data[0] = Convert.ToByte( 50 );
+                tx();
+            }
         }
 
     }
 
-    float map(float s, float a1, float a2, float b1, float b2)
+    float map(int s, float a1, float a2, float b1, float b2)
     {
-        return b1 + (s-a1)*(b2-b1)/(a2-a1);
+        return b1 + ((float)s-a1)*(b2-b1)/(a2-a1);
     }
 }

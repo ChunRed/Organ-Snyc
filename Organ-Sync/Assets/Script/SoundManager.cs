@@ -9,6 +9,7 @@ public class SoundManager : MonoBehaviour
     public AudioSource main_as; // 背景音樂檔案
     public AudioSource narration_as; //旁白聲音檔
     public AudioSource narration2_as; //旁白聲音檔
+    // public AudioSource narration3_as; //旁白聲音檔
     
     public AudioSource ending_as; //結束音檔
     public AudioSource ambientPass_as; //無邊及passthrough
@@ -18,7 +19,11 @@ public class SoundManager : MonoBehaviour
     
     public AudioMixer sceneMixer;  //場景總音量控制
     public AudioMixer lightMixer;  //光總音量控制
+
+    [Header("從指定秒數播放背景聲音")] 
     public float playFromSec = 0f; // 從指定秒數播放背景聲音
+
+    [Header("幾秒後背景音樂消失")] 
     public float turnoffFromSec = 0f; //幾秒後背景音樂消失
 
     public bool turnoff_main = false;
@@ -29,9 +34,15 @@ public class SoundManager : MonoBehaviour
 
     private bool narration_isPlay = false;
     private bool narration2_isPlay = false;
+    // public bool narration3_isPlay = false;
     private bool ending_isPlay = false;
     private bool ambientPass_isPlay = false;
+
+    [Header("是否是 用檯燈照自己 段落")] 
     public bool LightHitPart = false;
+
+    [Header("是否是 第一次照廚房 段落")] 
+    public bool KitchenHitPart = false;
 
     private void Awake()
     {
@@ -57,6 +68,12 @@ public class SoundManager : MonoBehaviour
         narration2_as.playOnAwake = false;
         narration2_as.loop = false;
         narration2_as.Stop();
+
+        // narration3_as.spatialBlend = 0f; // 2D
+        // narration3_as.volume = 1f;
+        // narration3_as.playOnAwake = false;
+        // narration3_as.loop = false;
+        // narration3_as.Stop();
 
         ending_as.spatialBlend = 0f; // 2D
         ending_as.volume = 1f;
@@ -89,7 +106,7 @@ public class SoundManager : MonoBehaviour
             lightVol = Mathf.Lerp(lightVol, -80f, Time.deltaTime * 0.2f);
             lightMixer.SetFloat("lightVol", lightVol);
         }else{
-            lightVol = Mathf.Lerp(lightVol, -3f, Time.deltaTime * 0.2f);
+            lightVol = Mathf.Lerp(lightVol, -19f, Time.deltaTime * 0.2f);
             lightMixer.SetFloat("lightVol", lightVol);
         }
 
@@ -97,7 +114,9 @@ public class SoundManager : MonoBehaviour
             sceneVol = Mathf.Lerp(sceneVol, -80f, Time.deltaTime * 0.2f);
             sceneMixer.SetFloat("sceneVol", sceneVol);
         }
+
     }
+
     public void play_main_as()
     {
         if (main_as != null)
@@ -128,6 +147,15 @@ public class SoundManager : MonoBehaviour
             narration2_isPlay = true;
         }
     }
+    
+    // public void play_narration3_as()
+    // {
+    //     if (narration3_as != null)
+    //     {
+    //         narration3_as.Play();
+    //         // narration3_isPlay = true;
+    //     }
+    // }
 
     public void play_ending_as()
     {

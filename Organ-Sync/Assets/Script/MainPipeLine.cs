@@ -96,6 +96,9 @@ public class MainPipeLine : MonoBehaviour
     public GameObject lamp_light_sensor;
     SpotLight_raycast _lamp_light_sensor;
 
+    public bool Select_Intro = false;
+    public bool DMX_trigger = false;
+
     private int lastFrameIndex;
     private float[] frameDeltaTimeArray;
     private bool soundStart = false;
@@ -142,7 +145,7 @@ public class MainPipeLine : MonoBehaviour
         _lamp_light_sensor = lamp_light_sensor.GetComponent<SpotLight_raycast>();
         _ControllerKeepAlive = GetComponent<ControllerKeepAlive>();
         _passthroughControl = GetComponent<passthroughControl>();
-
+        
 
     }
 
@@ -200,7 +203,7 @@ public class MainPipeLine : MonoBehaviour
 
 
             //Passthrough
-            if(soundStart == false) _passthroughControl.LerpPassthrough(0.5f, 5f);
+            if(soundStart == false) _passthroughControl.LerpPassthrough(0.3f, 5f);
             else _passthroughControl.LerpPassthrough(0f, 0.5f);
 
 
@@ -450,15 +453,29 @@ public class MainPipeLine : MonoBehaviour
             Light_Object = true;
 
             // 開啟 raycast 偵測物件效果
-            Window_Raycast_Effect = true;   
+            Window_Raycast_Effect = true; 
 
             //自動執行控制
             if (!IEnumerator_flag){
-                StartCoroutine(WaitChangeState(6f, 6.5f, 15f));
+                StartCoroutine(WaitChangeState(6f, 6.2f, 15f));
                 IEnumerator_flag = true;
             }
         }
 
+
+        //MARK:STATE - 6.2 / 6.3
+        //======================================================================
+        //======================================================================
+        //Select互動引導環節
+        else if(State == 6.2f){
+            
+            Select_Intro = true;
+            SoundManager.instance.KitchenHitPart = true;
+            State = 6.3f;
+        }
+        else if(State == 6.3f){
+            if(!Select_Intro) State = 6.5f;
+        }
 
 
         //MARK:STATE - 6.5
@@ -466,6 +483,7 @@ public class MainPipeLine : MonoBehaviour
         //======================================================================
         //窗光環節體驗時間
         else if(State == 6.5f){
+            SoundManager.instance.KitchenHitPart = false;
             //自動執行控制
             if (!IEnumerator_flag){
                 StartCoroutine(WaitChangeState(6.5f, 7f, VRmove_trigger_delay));
@@ -622,7 +640,8 @@ public class MainPipeLine : MonoBehaviour
         //進入 [Passthrough] 環節
         else if(State == 11f){
             //Passthrough
-            _passthroughControl.LerpPassthrough(0.2f, 0.1f);
+            _passthroughControl.LerpPassthrough(0.6f, 0.1f);
+            DMX_trigger = true;
         }
 
 

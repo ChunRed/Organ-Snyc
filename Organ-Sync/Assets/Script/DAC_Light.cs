@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
+using UnityEngine.XR;
 
 public class DAC_Light : MonoBehaviour
 {
@@ -21,7 +22,8 @@ public class DAC_Light : MonoBehaviour
 
     [Range(0.1f, 1f)]
     public float smooth = 0.5f;
-    public float point_light_offset = 90f; 
+    public float point_light_offsetX = 90f; 
+    public float point_light_offsetY = 0f; 
 
 
 
@@ -39,8 +41,6 @@ public class DAC_Light : MonoBehaviour
     public float Lamp_Smooth = 0.8f;
 
 
-
-    private Vector3 targetAngle;
     private Vector3 currentAngle;
     private Vector3 currentAngle2;
 
@@ -53,6 +53,13 @@ public class DAC_Light : MonoBehaviour
 
     public GameObject Lamp_LightSensor;
 
+
+
+
+    public XRNode controllerNode = XRNode.RightHand; // 可改成 LeftHand
+    private Quaternion initialRotation;
+    public bool isCalibrated = false;
+    public Vector3 targetAngle = new Vector3(0f, 0f, 0f);
  
     void Awake(){
         instance = this;    
@@ -73,11 +80,31 @@ public class DAC_Light : MonoBehaviour
     
     void Update()
     {   
-        
+        InputDevice device = InputDevices.GetDeviceAtXRNode(controllerNode);
 
+        if (device.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion currentRotation))
+        {
+            if (!isCalibrated)
+            {
+                // 第一次抓到數值就設定初始校正角度
+                initialRotation = currentRotation;
+                isCalibrated = true;
+            }
 
-        //偵測搖桿轉動量
-        targetAngle = VR_Hand.transform.localEulerAngles;
+            // 計算相對旋轉
+            Quaternion relativeRotation = Quaternion.Inverse(initialRotation) * currentRotation;
+
+            //mod 360
+            // 轉換為 Euler 角，方便限制角度
+            targetAngle.x = (relativeRotation.eulerAngles.x % 360 + 360) % 360;
+            targetAngle.y = (relativeRotation.eulerAngles.y % 360 + 360) % 360;
+            targetAngle.z = (relativeRotation.eulerAngles.z % 360 + 360) % 360;
+
+           Artnet_currentAngle = targetAngle;
+        }
+        else{
+            targetAngle = new Vector3(0f, 0f, 0f);
+        }
 
 
 
@@ -89,16 +116,18 @@ public class DAC_Light : MonoBehaviour
 
 
         currentAngle2 = new Vector3(
-            Mathf.LerpAngle(currentAngle2.x, targetAngle.x + point_light_offset, smooth*2.5f * Time.deltaTime), 
-            Mathf.LerpAngle(currentAngle2.y, targetAngle.y, smooth*2.5f * Time.deltaTime), 0f);
+            Mathf.LerpAngle(currentAngle2.x, targetAngle.x + point_light_offsetX, smooth*2.5f * Time.deltaTime), 
+            Mathf.LerpAngle(currentAngle2.y, (targetAngle.y + point_light_offsetY)*2f, smooth*2.5f * Time.deltaTime), 0f);
 
 
 
 
-        Artnet_currentAngle = new Vector3(
-            Mathf.LerpAngle(Artnet_currentAngle.x, targetAngle.x, smooth * Time.deltaTime),
-            Mathf.LerpAngle(Artnet_currentAngle.y, targetAngle.y, smooth * Time.deltaTime),
-            Mathf.LerpAngle(Artnet_currentAngle.z, targetAngle.z, smooth * Time.deltaTime));
+        //Artnet_currentAngle = new Vector3(
+            // Mathf.LerpAngle(Artnet_currentAngle.x, (targetAngle.x % 360 + 360) % 360, 0.9f * Time.deltaTime),
+            // Mathf.LerpAngle(Artnet_currentAngle.y, (targetAngle.y % 360 + 360) % 360, 0.9f * Time.deltaTime),
+            // Mathf.LerpAngle(Artnet_currentAngle.z, (targetAngle.z % 360 + 360) % 360, 0.9f * Time.deltaTime));
+            
+
 
 
 

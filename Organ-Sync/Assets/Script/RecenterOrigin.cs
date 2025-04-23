@@ -25,6 +25,9 @@ public class RecenterOrigin : MonoBehaviour
     public AnimationCurve Move_curve;
     public float easing = 0f;
 
+    [Header("校正鎖 : 校正只在 State-0 才會觸發")]
+    public bool Recenter_inState0 = false;
+
     float current_percent = 0f;
 
 
@@ -113,33 +116,48 @@ public class RecenterOrigin : MonoBehaviour
 
         //手把控制
         if (rightController.isValid)
-        {
-            // A 按鈕（通常是primaryButton）
-            bool aButtonPressed;
-            if (rightController.TryGetFeatureValue(CommonUsages.primaryButton, out aButtonPressed) && aButtonPressed)
-            {
-                //Debug.Log("A 按鈕被按下");
-            }
+        {   
 
-            // Trigger
-            float triggerValue;
-            if (rightController.TryGetFeatureValue(CommonUsages.trigger, out triggerValue) && triggerValue > 0.5f)
-            {
-                Recenter();
-                VR_CenterIcon.SetFloat("_pass", 1f);
-                LAMP_CenterIcon.SetFloat("_pass", 1f);
+            // 判斷是否只在 State 0 才觸發
+            if(Recenter_inState0){
+
+
+                if(MainPipeLine.instance.State == 0f){
+                    
+                    // Trigger
+                    float triggerValue;
+                    if (rightController.TryGetFeatureValue(CommonUsages.trigger, out triggerValue) && triggerValue > 0.5f)
+                    {
+                        Recenter();
+                        VR_CenterIcon.SetFloat("_pass", 1f);
+                        LAMP_CenterIcon.SetFloat("_pass", 1f);
+                        DAC_Light.instance.isCalibrated = false;
+                    }
+                    else{
+                        VR_CenterIcon.SetFloat("_pass", 0f);
+                        LAMP_CenterIcon.SetFloat("_pass", 0f);
+                    }
+                }
+
             }
             else{
-                VR_CenterIcon.SetFloat("_pass", 0f);
-                LAMP_CenterIcon.SetFloat("_pass", 0f);
-            }
 
-            // Grip
-            float gripValue;
-            if (rightController.TryGetFeatureValue(CommonUsages.grip, out gripValue) && gripValue > 0.1f)
-            {
-                //Debug.Log($"Grip 被按壓，數值: {gripValue}");
+                // Trigger
+                float triggerValue;
+                if (rightController.TryGetFeatureValue(CommonUsages.trigger, out triggerValue) && triggerValue > 0.5f)
+                {
+                    Recenter();
+                    VR_CenterIcon.SetFloat("_pass", 1f);
+                    LAMP_CenterIcon.SetFloat("_pass", 1f);
+                    DAC_Light.instance.isCalibrated = false;
+                }
+                else{
+                    VR_CenterIcon.SetFloat("_pass", 0f);
+                    LAMP_CenterIcon.SetFloat("_pass", 0f);
+                }
             }
+            
+
         }
 
     }
