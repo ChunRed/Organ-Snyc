@@ -108,6 +108,10 @@ public class MainPipeLine : MonoBehaviour
     ControllerKeepAlive _ControllerKeepAlive;
     //Passthrough變數
     passthroughControl _passthroughControl;
+    //結束時出現字樣
+    EndGame _EndGame;
+    //發光物件控制
+    LightingObject _lightObj;
 
 
     private void Awake(){
@@ -145,6 +149,10 @@ public class MainPipeLine : MonoBehaviour
         _lamp_light_sensor = lamp_light_sensor.GetComponent<SpotLight_raycast>();
         _ControllerKeepAlive = GetComponent<ControllerKeepAlive>();
         _passthroughControl = GetComponent<passthroughControl>();
+        _EndGame = GetComponent<EndGame>();
+        _lightObj = GetComponent<LightingObject>();
+
+
         
 
     }
@@ -346,7 +354,7 @@ public class MainPipeLine : MonoBehaviour
         //達成指定目標後進入 "窗光環節"
         else if(State == 4f){
             //state4 顯示目標說明UI文字
-            //intro_text.SetFloat("_pass", 1f);
+            intro_text.SetFloat("_pass", 1f);
             
 
             //停止 " 左右操作 " 動畫
@@ -370,7 +378,7 @@ public class MainPipeLine : MonoBehaviour
                 if(lamp_pass_count > 5f) {
                     State = 5f; 
                     //state4 關閉目標說明UI文字
-                    //intro_text.SetFloat("_pass", 0f);
+                    intro_text.SetFloat("_pass", 0f);
                 }
                 else lamp_pass_count += Time.deltaTime;
             }
@@ -593,7 +601,10 @@ public class MainPipeLine : MonoBehaviour
             
             // 關閉發亮物件
             Light_Object = false;
-            DestroyModel = true;
+            // if(_lightObj.lightObjPass_flag){
+            //     DestroyModel = true;
+            // }
+            
             
 
             StartCoroutine(WaitChangeState(9f, 10f, 30f));
@@ -642,6 +653,21 @@ public class MainPipeLine : MonoBehaviour
             //Passthrough
             _passthroughControl.LerpPassthrough(0.6f, 0.1f);
             DMX_trigger = true;
+
+            //自動執行控制
+            if (!IEnumerator_flag){
+                StartCoroutine(WaitChangeState(11f, 12f, 25f));
+                IEnumerator_flag = true;
+            }
+        }
+
+
+        //MARK:STATE - 12
+        //======================================================================
+        //======================================================================
+        //[Passthrough]出現結束字樣
+        else if(State == 12f){
+            _EndGame.showEnd = true;
         }
 
 

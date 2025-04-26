@@ -38,8 +38,12 @@ public class ArtNet:MonoBehaviour
     public TMPro.TextMeshProUGUI POSX; 
     public TMPro.TextMeshProUGUI POSY; 
     public bool Reset_button = false;
+    public bool test_trigger = false;
     
 
+    public void TestTrigger(){
+        test_trigger = !test_trigger;
+    }
     
     public void ArtNet_Init(){
         _target = new IPEndPoint(IPAddress.Parse(_destinationIP), 6454);
@@ -130,14 +134,14 @@ public class ArtNet:MonoBehaviour
             _lastTxTime = Time.time;
 
 
-            if(MainPipeLine.instance.DMX_trigger){
+            if(MainPipeLine.instance.DMX_trigger || test_trigger){
                 _data[1] = Convert.ToByte( new_Y);
                 _data[0] = Convert.ToByte( new_X);
                 tx();
             }
             else{
                 _data[1] = Convert.ToByte( 0 );
-                _data[0] = Convert.ToByte( 50 );
+                _data[0] = Convert.ToByte( 135 );
                 tx();
             }
         }

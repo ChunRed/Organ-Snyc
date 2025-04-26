@@ -13,6 +13,7 @@ public class select_intro : MonoBehaviour
     SunlightHitKitchen _teatopSensor;
     float selectTime_count = 0f;
     public bool get_light = false;
+    float select_pass = 0f;
 
 
     [Header("UI材質")]
@@ -22,6 +23,7 @@ public class select_intro : MonoBehaviour
     void Start()
     {
         select_material.SetFloat("_emission", 0f);
+        M_select_intro.SetFloat("_change", 0f);
 
         _teatopSensor = teatopSensor.GetComponent<SunlightHitKitchen>();
     }
@@ -32,8 +34,13 @@ public class select_intro : MonoBehaviour
         get_light = _teatopSensor.light_istrigger;
         if(get_light && MainPipeLine.instance.Select_Intro){
             selectTime_count += Time.deltaTime;
-            if(selectTime_count > 5f) {
+            if(selectTime_count > 18f && selectTime_count < 23f ) {
+                select_pass = Mathf.Lerp(select_pass, 1f, 1f * Time.deltaTime);
+                M_select_intro.SetFloat("_change", select_pass);
+            }else if(selectTime_count >= 23f ){
                 MainPipeLine.instance.Select_Intro = false;
+            }else{
+                M_select_intro.SetFloat("_change", 0f);
             }
         }
         else{

@@ -100,7 +100,9 @@ public class DAC_Light : MonoBehaviour
             targetAngle.y = (relativeRotation.eulerAngles.y % 360 + 360) % 360;
             targetAngle.z = (relativeRotation.eulerAngles.z % 360 + 360) % 360;
 
-           Artnet_currentAngle = targetAngle;
+            Artnet_currentAngle.x = (relativeRotation.eulerAngles.x + 180 % 360 + 360) % 360;
+            Artnet_currentAngle.y = (relativeRotation.eulerAngles.y + 180 % 360 + 360) % 360;
+            Artnet_currentAngle.z = targetAngle.z;
         }
         else{
             targetAngle = new Vector3(0f, 0f, 0f);

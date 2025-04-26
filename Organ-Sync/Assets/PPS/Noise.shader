@@ -80,9 +80,9 @@ Shader "Hidden/Shader/Noise"
         float3 Intensity = float3(_Intensity,_Intensity,_Intensity);
         //float3 color = (noise_color * Intensity) + (sourceColor * (float3(1,1,1) - Intensity));
 
-        sourceColor.x = Remap(sourceColor.x, 0, 1, 0.05, 2);
-        sourceColor.y = Remap(sourceColor.y, 0, 1, 0.05, 2);
-        sourceColor.z = Remap(sourceColor.z, 0, 1, 0.05, 2);
+        sourceColor.x = Remap(sourceColor.x, 0, 1, 0.0, 2);
+        sourceColor.y = Remap(sourceColor.y, 0, 1, 0.0, 2);
+        sourceColor.z = Remap(sourceColor.z, 0, 1, 0.0, 2);
         // sourceColor = Remap(sourceColor, 0, 1, 0.05, 2);
         float3 color = (noise_color * Intensity) + (sourceColor * (float3(1,1,1) - Intensity));
 
