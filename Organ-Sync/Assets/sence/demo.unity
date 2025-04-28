@@ -8757,14 +8757,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 334083470}
   serializedVersion: 2
-  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: 0.43, y: 0.08, z: -0.36}
+  m_LocalRotation: {x: 0.40986338, y: -0.572679, z: 0.5030135, w: -0.5010273}
+  m_LocalPosition: {x: 5.7648916, y: 1.0489945, z: -1.2768327}
   m_LocalScale: {x: -0.02, y: -0.02, z: -0.02}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1270054963}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 170.478, y: -90.47101, z: 99.218}
 --- !u!1 &340053206
 GameObject:
   m_ObjectHideFlags: 0
@@ -21297,14 +21297,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 761225168}
   serializedVersion: 2
-  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: 0.43, y: 0.08, z: -0.57}
+  m_LocalRotation: {x: 0.40986338, y: -0.572679, z: 0.5030135, w: -0.5010273}
+  m_LocalPosition: {x: 5.971992, y: 1.0142549, z: -1.2751294}
   m_LocalScale: {x: -0.02, y: -0.02, z: -0.02}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 939324399}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 170.478, y: -90.47101, z: 99.218}
 --- !u!1 &762074627
 GameObject:
   m_ObjectHideFlags: 0
@@ -47057,8 +47057,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c1ce4fb46143f46bc5cb5224c934f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clearColorMode: 0
-  backgroundColorHDR: {r: 0.025, g: 0.07, b: 0.19, a: 0}
+  clearColorMode: 1
+  backgroundColorHDR: {r: 0, g: 0, b: 0, a: 0}
   clearDepth: 1
   volumeLayerMask:
     serializedVersion: 2
@@ -47087,7 +47087,7 @@ MonoBehaviour:
     m_Anamorphism: 0
   flipYMode: 0
   xrRendering: 1
-  fullscreenPassthrough: 0
+  fullscreenPassthrough: 1
   allowDynamicResolution: 0
   customRenderingSettings: 0
   invertFaceCulling: 0
@@ -47207,16 +47207,16 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  field of view: 12.5
+  orthographic: 1
+  orthographic size: -0.14
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: e89739a67fe27d543b10d4954f131f17, type: 2}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 2
   m_TargetEye: 3
   m_HDR: 0
   m_AllowMSAA: 0
@@ -58930,9 +58930,9 @@ Transform:
   m_GameObject: {fileID: 1679849588}
   serializedVersion: 2
   m_LocalRotation: {x: -0.6330222, y: 0.13302222, z: 0.111618884, w: 0.7544066}
-  m_LocalPosition: {x: 1.783, y: -0.634, z: 9.604}
-  m_LocalScale: {x: 0.179069, y: 0.032471396, z: 0.01145309}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 1.913, y: -0.634, z: 9.557}
+  m_LocalScale: {x: 0.1, y: 0.018133456, z: 0.006395909}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1904931967}
   m_LocalEulerAnglesHint: {x: -80, y: 20, z: 0}
@@ -71623,7 +71623,7 @@ MonoBehaviour:
   position2: {x: 0.2, y: 0.4, z: -7.5}
   position3: {x: 0.2, y: 0.4, z: -8.25}
   position4: {x: 0, y: 0, z: 0}
-  State: 6
+  State: 0
   model_float: 0
   Directional_Light: 0
   Window_Raycast_Effect: 0
@@ -71644,8 +71644,8 @@ MonoBehaviour:
   Model: {fileID: 255607080}
   Smooth_Model: {fileID: 2086648433}
   DestroyModel: 0
-  Lamp_trigger_delay: 1
-  Intro_trigger_delay: 1
+  Lamp_trigger_delay: 35
+  Intro_trigger_delay: 78
   VRmove_trigger_delay: 60
   lamp_light_sensor: {fileID: 1419120741}
   Select_Intro: 0

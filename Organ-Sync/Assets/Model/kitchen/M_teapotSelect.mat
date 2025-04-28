@@ -289,7 +289,7 @@ Material:
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
-    - _emission: 299.9995
+    - _emission: 299.99973
     - _pass: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

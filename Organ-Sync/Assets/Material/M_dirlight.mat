@@ -247,16 +247,16 @@ Material:
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
-    - _efect: 0.46
+    - _efect: 0.3
     - _speed: 0.001
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color1: {r: 0.03551085, g: 0.13641323, b: 0.3962264, a: 0}
-    - _Color2: {r: 0.98039216, g: 0.57380354, b: 0.11764707, a: 0}
-    - _Color3: {r: 0.57254905, g: 0.8135544, b: 1, a: 0}
-    - _Color4: {r: 1, g: 0.86083746, b: 0.6650944, a: 0}
+    - _Color1: {r: 1, g: 0.5678949, b: 0.41037738, a: 0}
+    - _Color2: {r: 0.8226869, g: 1, b: 0.6179246, a: 0}
+    - _Color3: {r: 0.514151, g: 0.78604823, b: 1, a: 0}
+    - _Color4: {r: 1, g: 0.83879024, b: 0.6084906, a: 0}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
