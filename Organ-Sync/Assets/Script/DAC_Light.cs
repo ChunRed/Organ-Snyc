@@ -30,7 +30,17 @@ public class DAC_Light : MonoBehaviour
     //dynamic control Directional light 
     [Range(0, 15000)]
     public int intensity = 0;
-    public Color color = new Color (180, 180, 180, 180);
+
+    [Header("方向光顏色")]
+    public Material directionalLight_material; // 方向光材質顏色
+    public Color color1 = new Color (180, 180, 180, 180);
+    public Color color2 = new Color (180, 180, 180, 180);
+    public Color color3 = new Color (180, 180, 180, 180);
+    public Color color4 = new Color (180, 180, 180, 180);
+    private Color lerp_color1 = new Color (180, 180, 180, 180);
+    private Color lerp_color2 = new Color (180, 180, 180, 180);
+    private Color lerp_color3 = new Color (180, 180, 180, 180);
+    private Color lerp_color4 = new Color (180, 180, 180, 180);
     float window_intensity = 0f;
 
 
@@ -146,13 +156,21 @@ public class DAC_Light : MonoBehaviour
         window_emmision.SetFloat("_emission", window_intensity);
         
 
+        //MARK:改變方向光的強度
         Directional_Light.intensity = (int)Mathf.Lerp(Directional_Light.intensity , intensity, 0.3f * Time.deltaTime);
-        Directional_Light.color = Color.Lerp(Directional_Light.color , color, 0.3f * Time.deltaTime);
+
+
+        //MARK:改變方向光的顏色
+        lerp_color1 = Color.Lerp(lerp_color1, color1, 3f * Time.deltaTime);
+        lerp_color2 = Color.Lerp(lerp_color2, color2, 3f * Time.deltaTime);
+        lerp_color3 = Color.Lerp(lerp_color3, color3, 3f * Time.deltaTime);
+        lerp_color4 = Color.Lerp(lerp_color4, color4, 3f * Time.deltaTime);
+
 
 
         if(Lamp_Light.intensity != 0){
-            Lamp.transform.localEulerAngles = currentAngle2;
-            //noedge_light.transform.localEulerAngles = currentAngle2;
+            Lamp.transform.localEulerAngles = currentAngle2; 
+
             Lamp_Light.intensity = (int)Mathf.Lerp(Lamp_Light.intensity , Lamp_intensity, Lamp_Smooth * Time.deltaTime);
             Lamp_Light.color = Color.Lerp(Lamp_Light.color , Lamp_color, Lamp_Smooth * Time.deltaTime);
 
@@ -160,6 +178,12 @@ public class DAC_Light : MonoBehaviour
             Lamp_head_emmision.SetColor("_Color", new Color(244*Lamp_emmision, 154*Lamp_emmision, 86*Lamp_emmision, 1));
             Lamp_head_emmision.SetFloat("_emission", Lamp_emmision*50f);
             Lamp_Light_emmision.SetFloat("_pass", Lamp_emmision*180f);
+
+
+            directionalLight_material.SetColor("_Color1", lerp_color1);
+            directionalLight_material.SetColor("_Color2", lerp_color2);
+            directionalLight_material.SetColor("_Color3", lerp_color3);
+            directionalLight_material.SetColor("_Color4", lerp_color4);
             
         }
         else{

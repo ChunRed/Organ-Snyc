@@ -39,6 +39,11 @@ public class ArtNet:MonoBehaviour
     public TMPro.TextMeshProUGUI POSY; 
     public bool Reset_button = false;
     public bool test_trigger = false;
+
+
+    [Header("實體空間燈光")]
+    public float space_light_instence = 0f;
+    public bool spaselight_istrigger = false;
     
 
     public void TestTrigger(){
@@ -137,13 +142,30 @@ public class ArtNet:MonoBehaviour
             if(MainPipeLine.instance.DMX_trigger || test_trigger){
                 _data[1] = Convert.ToByte( new_Y);
                 _data[0] = Convert.ToByte( new_X);
-                tx();
+                
             }
             else{
                 _data[1] = Convert.ToByte( 0 );
                 _data[0] = Convert.ToByte( 135 );
-                tx();
+                
             }
+
+
+            if(!spaselight_istrigger){
+                if(MainPipeLine.instance.space_light){
+                space_light_instence = Mathf.Lerp(space_light_instence, 1f, 0.1f * Time.deltaTime);
+                }
+                else{
+                    space_light_instence = Mathf.Lerp(space_light_instence, 0f, 3f * Time.deltaTime);
+                }  
+            }
+            else{
+                space_light_instence = 1f;
+            }
+            
+
+            _data[2] = Convert.ToByte( (int)(space_light_instence*255) );
+            tx();
         }
 
     }
@@ -151,5 +173,9 @@ public class ArtNet:MonoBehaviour
     float map(int s, float a1, float a2, float b1, float b2)
     {
         return b1 + ((float)s-a1)*(b2-b1)/(a2-a1);
+    }
+
+    public void Trigger_spacelight(){
+        spaselight_istrigger = !spaselight_istrigger;
     }
 }

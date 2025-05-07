@@ -53,6 +53,10 @@ public class Shader_ctrl : MonoBehaviour
     public float Jump = 0f;
     [Range(0f, 0.03f)]
     public float Shake = 0f;
+    [Range(0f, 0.6f)]
+    public float Noise = 0f;
+    [Range(0f, 0.6f)]
+    public float Contrast = 0f;
     public GameObject self_raycast;
     private SunlightRaycastAudio _self_raycast;
     
@@ -67,7 +71,10 @@ public class Shader_ctrl : MonoBehaviour
 
    void Update()
     {
+
+
         //MARK: Volume 參數調整
+        //MARK: 雜訊特效
         m_Volume.profile.TryGet<Kino.PostProcessing.Glitch>(out var pp);
         {
             pp.block.value = Mathf.Lerp(pp.block.value, Block, PPLerp_Speed * Time.deltaTime);
@@ -76,10 +83,34 @@ public class Shader_ctrl : MonoBehaviour
             pp.shake.value = Mathf.Lerp(pp.shake.value, Shake, PPLerp_Speed * Time.deltaTime);
             
         }
-        if(_self_raycast.light_istrigger) Jump = 0.02f;
-        else Jump = 0f;
 
-        
+
+        //MARK: NOISE特效
+        m_Volume.profile.TryGet<Noise>(out var n_pp);
+        {
+            n_pp.intensity.value = Mathf.Lerp( n_pp.intensity.value, Noise, 0.7f * Time.deltaTime );
+        }
+
+
+
+         //MARK: ADJUSTMENTS特效
+         m_Volume.profile.TryGet<ColorAdjustments>(out var a_pp);
+        {
+            a_pp.contrast.value = Mathf.Lerp( a_pp.contrast.value, Contrast, 0.3f * Time.deltaTime );
+        }
+
+
+
+        if(_self_raycast.light_istrigger) {
+            Jump = 0.025f;
+            Noise = 0.2f;
+            Contrast = -89f;
+        }
+        else {
+            Jump = 0f;
+            Noise = 0.15f;
+            Contrast = -50f;
+        }
 
 
 

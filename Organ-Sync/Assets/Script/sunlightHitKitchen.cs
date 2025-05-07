@@ -24,7 +24,12 @@ public class SunlightHitKitchen : MonoBehaviour
     [Header("光線參數調整")]
     [Range(50, 50000)]
     public int intensity = 3000;
-    public Color color = new Color (180, 180, 180, 180);
+    
+    public Color color1 = new Color (180, 180, 180, 180);
+    public Color color2 = new Color (180, 180, 180, 180);
+    public Color color3 = new Color (180, 180, 180, 180);
+    public Color color4 = new Color (180, 180, 180, 180);
+
     public bool control_light = true;
     private bool light_change = true;
     private bool kitchenFlag = false;
@@ -66,9 +71,19 @@ public class SunlightHitKitchen : MonoBehaviour
                 audioSource.volume = Mathf.Lerp(audioSource.volume, NoLightVol, Time.deltaTime * 3f);
                 kitchenNarration.volume = Mathf.Lerp(kitchenNarration.volume, NoLightVol, Time.deltaTime * 3f);
 
+
+                //MARK: 預設
                 if(!light_change){
+
+                    //改變光的亮度
                     DAC_Light.instance.intensity = 1000;
-                    DAC_Light.instance.color = Color.white;
+
+                    //改變光的強度
+                    // DAC_Light.instance.color1 = new Color (255, 100, 100);
+                    // DAC_Light.instance.color2 = new Color (110, 255, 110);
+                    // DAC_Light.instance.color3 = new Color (100, 150, 255);
+                    // DAC_Light.instance.color4 = new Color (255, 150, 100);
+
                     light_change = true;
                     light_istrigger = false;
                 }
@@ -92,10 +107,21 @@ public class SunlightHitKitchen : MonoBehaviour
                     kitchenNarration.volume = Mathf.Lerp(kitchenNarration.volume, LightVol, Time.deltaTime * 3f);
                 }
 
-                
+
+
+                //MARK: light sensor trigger 後對光造成的數值變化
                 if(control_light && light_change){
+
+                    //改變光的亮度
                     DAC_Light.instance.intensity = intensity;
-                    DAC_Light.instance.color = color;
+
+                    //改變光的強度
+                    DAC_Light.instance.color1 = color1;
+                    DAC_Light.instance.color2 = color2;
+                    DAC_Light.instance.color3 = color3;
+                    DAC_Light.instance.color4 = color4;
+
+
                     light_change = false;
                     light_istrigger = true;
                     //ControllerKeepAlive.instance.SendKeepAlivePulse(0.8f, 0.5f);

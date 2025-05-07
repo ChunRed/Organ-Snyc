@@ -290,7 +290,7 @@ Material:
     - _explosure: 1
     - _itensity: 1
     - _itensity_1: 1.02
-    - _pass: 0.999996
+    - _pass: 0.9999981
     m_Colors:
     - _BaseColor: {r: 0.9063317, g: 0.9063317, b: 0.9063317, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}

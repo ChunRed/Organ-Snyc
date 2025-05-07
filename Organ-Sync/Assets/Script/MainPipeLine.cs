@@ -43,7 +43,9 @@ public class MainPipeLine : MonoBehaviour
     public bool Lamp_Raycast_Effect = false;
     public bool Light_Object = false;
     public bool  ambient_light = false;
+    public bool space_light = false;
     private float lamp_pass_count = 0f;
+
 
 
     OVRPassthroughLayer passthrough;
@@ -153,7 +155,7 @@ public class MainPipeLine : MonoBehaviour
         _lightObj = GetComponent<LightingObject>();
 
 
-        
+        space_light = true;
 
     }
 
@@ -195,7 +197,10 @@ public class MainPipeLine : MonoBehaviour
 
             // 關閉方向光
             DAC_Light.instance.intensity = 0;
-            DAC_Light.instance.color = Color.black;
+            DAC_Light.instance.color1 = Color.black;
+            DAC_Light.instance.color2 = Color.black;
+            DAC_Light.instance.color3 = Color.black;
+            DAC_Light.instance.color4 = Color.black;
             Directional_Light = false;
 
             // 關閉台燈光
@@ -211,7 +216,7 @@ public class MainPipeLine : MonoBehaviour
 
 
             //Passthrough
-            if(soundStart == false) _passthroughControl.LerpPassthrough(0.3f, 5f);
+            if(soundStart == false) _passthroughControl.LerpPassthrough(0.7f, 5f);
             else _passthroughControl.LerpPassthrough(0f, 0.5f);
 
 
@@ -232,6 +237,10 @@ public class MainPipeLine : MonoBehaviour
                     StartCoroutine(WaitChangeState(0f, 1f, Lamp_trigger_delay)); // Lamp_trigger_delay => 35f
                     
                 }
+
+
+                //關閉實體空間的燈
+                space_light = false;
             }
         }
 
@@ -448,7 +457,10 @@ public class MainPipeLine : MonoBehaviour
             Shader_ctrl.instance.Jitter = 0f;
 
             DAC_Light.instance.intensity = 4000;
-            DAC_Light.instance.color = Color.white;
+            DAC_Light.instance.color1 = Color.white;
+            DAC_Light.instance.color2 = Color.white;
+            DAC_Light.instance.color3 = Color.white;
+            DAC_Light.instance.color4 = Color.white;
             Directional_Light = true;
             // 若旁白1未結束，停止旁白1
             SoundManager.instance.pause_narration_as();
@@ -597,7 +609,10 @@ public class MainPipeLine : MonoBehaviour
 
             // 關閉方向光、關閉窗戶 emmision
             DAC_Light.instance.intensity = 0;
-            DAC_Light.instance.color = Color.black;
+            DAC_Light.instance.color1 = Color.black;
+            DAC_Light.instance.color2 = Color.black;
+            DAC_Light.instance.color3 = Color.black;
+            DAC_Light.instance.color4 = Color.black;
             
             // 關閉發亮物件
             Light_Object = false;
@@ -651,7 +666,7 @@ public class MainPipeLine : MonoBehaviour
         //進入 [Passthrough] 環節
         else if(State == 11f){
             //Passthrough
-            _passthroughControl.LerpPassthrough(0.6f, 0.1f);
+            _passthroughControl.LerpPassthrough(0.85f, 0.1f);
             DMX_trigger = true;
 
             //自動執行控制
@@ -668,6 +683,25 @@ public class MainPipeLine : MonoBehaviour
         //[Passthrough]出現結束字樣
         else if(State == 12f){
             _EndGame.showEnd = true;
+
+            //開啟實體空間的燈
+            space_light = true;
+
+            //自動執行控制
+            if (!IEnumerator_flag){
+                StartCoroutine(WaitChangeState(12f, 13f, 10f));
+                IEnumerator_flag = true;
+            }
+        }
+
+
+        //MARK:STATE - 13
+        //======================================================================
+        //======================================================================
+        //關燈結束
+        else if(State == 13f){
+            //關閉實體空間的燈
+            space_light = false;
         }
 
 
